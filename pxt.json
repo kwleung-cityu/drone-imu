@@ -23,7 +23,7 @@
     "supportedTargets": [
         "microbit"
     ],
-    "preferredEditor": "tsprd",
+    "preferredEditor": "tsprj",
     "pxt": {
         "extension": true,
         "yotta": {
