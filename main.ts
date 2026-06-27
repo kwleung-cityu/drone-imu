@@ -1,31 +1,25 @@
 //% color="#2E7D32" weight=100 icon="\uf142" block="Drone IMU"
 namespace droneIMU {
 
-    let nativeAvailable = true;
+    //% shim=droneIMU::initMPU6050
+    function initMPU6050(): void {
+    }
+
+    //% shim=droneIMU::getSensorData
+    function getSensorData(): Buffer {
+        return pins.createBuffer(0);
+    }
 
     //% block="initialize MPU6050 sensor"
     export function init(): void {
-        if (!nativeAvailable) return;
-
-        try {
-            initMPU6050();
-        } catch (e) {
-            nativeAvailable = false;
-        }
+        initMPU6050();
     }
 
     //% block="IMU shim sanity check"
     export function shimSanityCheck(): boolean {
-        if (!nativeAvailable) return false;
-
-        try {
-            initMPU6050();
-            let buf = getSensorData();
-            return !!buf && buf.length === 14;
-        } catch (e) {
-            nativeAvailable = false;
-            return false;
-        }
+        initMPU6050();
+        let buf = getSensorData();
+        return !!buf && buf.length === 14;
     }
 
     /**
@@ -34,15 +28,7 @@ namespace droneIMU {
      */
     //% block="read processed IMU values"
     export function readProcessedData(): number[] {
-        if (!nativeAvailable) return [0, 0, 0, 0, 0, 0];
-
-        let buf = pins.createBuffer(0);
-        try {
-            buf = getSensorData();
-        } catch (e) {
-            nativeAvailable = false;
-            return [0, 0, 0, 0, 0, 0];
-        }
+        let buf = getSensorData();
         if (!buf || buf.length < 14) return [0, 0, 0, 0, 0, 0];
 
         // Helper function to combine 8-bit registers into signed 16-bit integers
