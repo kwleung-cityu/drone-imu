@@ -9,6 +9,7 @@
         "microphone": "*"
     },
     "files": [
+        "shims.d.ts",
         "main.ts",
         "droneIMU.cpp"
     ],
