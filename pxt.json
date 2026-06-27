@@ -13,6 +13,9 @@
         "main.ts",
         "droneIMU.cpp"
     ],
+    "simFiles": [
+        "sim/droneIMU.ts"
+    ],
     "testFiles": [
         "test.ts"
     ],
