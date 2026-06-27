@@ -6,6 +6,13 @@ namespace droneIMU {
         initMPU6050();
     }
 
+    //% block="IMU shim sanity check"
+    export function shimSanityCheck(): boolean {
+        initMPU6050();
+        let buf = getSensorData();
+        return !!buf && buf.length === 14;
+    }
+
     /**
      * Reads all active orientation rates from the IMU.
      * Returns an array: [AccelX(G), AccelY(G), AccelZ(G), GyroX(deg/s), GyroY(deg/s), GyroZ(deg/s)]
