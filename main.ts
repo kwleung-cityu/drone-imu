@@ -20,7 +20,7 @@ namespace droneIMU {
     //% block="read processed IMU values"
     export function readProcessedData(): number[] {
         let buf = getSensorData();
-        if (!buf || buf.length < 14) return;
+        if (!buf || buf.length < 14) return [0, 0, 0, 0, 0, 0];
 
         // Helper function to combine 8-bit registers into signed 16-bit integers
         function parse16(highIdx: number): number {
