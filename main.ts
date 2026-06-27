@@ -2,6 +2,14 @@
 namespace droneIMU {
 
     let nativeAvailable = true;
+    let simKp = 0;
+    let simKi = 0;
+    let simKd = 0;
+    let simOutMin = -1024;
+    let simOutMax = 1024;
+    let simIntegral = 0;
+    let simPrevError = 0;
+    let simHasPrev = false;
 
     //% block="initialize MPU6050 sensor"
     export function init(): void {
@@ -61,5 +69,77 @@ namespace droneIMU {
         let gz = parse16(12) / 65.5;
 
         return [ax, ay, az, gx, gy, gz];
+    }
+
+    //% block="configure PID kp $kp ki $ki kd $kd min $outMin max $outMax"
+    export function configurePID(kp: number, ki: number, kd: number, outMin: number, outMax: number): void {
+        if (!nativeAvailable) {
+            simKp = kp;
+            simKi = ki;
+            simKd = kd;
+            if (outMin <= outMax) {
+                simOutMin = outMin;
+                simOutMax = outMax;
+            } else {
+                simOutMin = outMax;
+                simOutMax = outMin;
+            }
+            return;
+        }
+
+        try {
+            pidConfigure(kp, ki, kd, outMin, outMax);
+        } catch (e) {
+            nativeAvailable = false;
+            configurePID(kp, ki, kd, outMin, outMax);
+        }
+    }
+
+    //% block="reset PID"
+    export function resetPID(): void {
+        if (!nativeAvailable) {
+            simIntegral = 0;
+            simPrevError = 0;
+            simHasPrev = false;
+            return;
+        }
+
+        try {
+            pidReset();
+        } catch (e) {
+            nativeAvailable = false;
+            resetPID();
+        }
+    }
+
+    //% block="PID update setpoint $setpoint measurement $measurement dt ms $dtMs"
+    export function updatePID(setpoint: number, measurement: number, dtMs: number): number {
+        if (!nativeAvailable) {
+            let dt = dtMs / 1000;
+            if (dt <= 0.000001) dt = 0.01;
+
+            let err = setpoint - measurement;
+            simIntegral += err * dt;
+            if (simIntegral < simOutMin) simIntegral = simOutMin;
+            if (simIntegral > simOutMax) simIntegral = simOutMax;
+
+            let d = 0;
+            if (simHasPrev) d = (err - simPrevError) / dt;
+
+            let out = simKp * err + simKi * simIntegral + simKd * d;
+            if (out < simOutMin) out = simOutMin;
+            if (out > simOutMax) out = simOutMax;
+
+            simPrevError = err;
+            simHasPrev = true;
+            return out;
+        }
+
+        try {
+            return pidUpdate(setpoint, measurement, dtMs);
+        } catch (e) {
+            nativeAvailable = false;
+            return updatePID(setpoint, measurement, dtMs);
+        }
     }
 }
