@@ -1,20 +1,20 @@
 //% color="#2E7D32" weight=100 icon="\uf142" block="Drone IMU"
 namespace droneIMU {
 
-    function hasShim(fnName: string): boolean {
-        return !!(<any>droneIMU)[fnName];
+    function hasNativeBindings(): boolean {
+        return !!(<any>initMPU6050) && !!(<any>getSensorData);
     }
 
     //% block="initialize MPU6050 sensor"
     export function init(): void {
-        if (hasShim("initMPU6050")) {
+        if (hasNativeBindings()) {
             initMPU6050();
         }
     }
 
     //% block="IMU shim sanity check"
     export function shimSanityCheck(): boolean {
-        if (!hasShim("initMPU6050") || !hasShim("getSensorData")) {
+        if (!hasNativeBindings()) {
             return false;
         }
         initMPU6050();
@@ -28,7 +28,7 @@ namespace droneIMU {
      */
     //% block="read processed IMU values"
     export function readProcessedData(): number[] {
-        if (!hasShim("getSensorData")) return [0, 0, 0, 0, 0, 0];
+        if (!hasNativeBindings()) return [0, 0, 0, 0, 0, 0];
 
         let buf = getSensorData();
         if (!buf || buf.length < 14) return [0, 0, 0, 0, 0, 0];
