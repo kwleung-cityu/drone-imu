@@ -1,140 +1,55 @@
-# Drone IMU (micro:bit v2/v2.2 + MPU6050)
+# Drone IMU (Reset Baseline)
 
-High-speed MPU6050 extension for MakeCode micro:bit with:
+This repository is currently in a troubleshooting reset mode.
 
-1. Native C++ I2C driver for IMU reads at 100 Hz target loop pacing.
-2. Native C++ PID core for simple control experiments.
-3. TypeScript and MakeCode Python-facing APIs.
+Goal:
 
-## Practical Approach (Recommended)
+1. Verify extension import stability first.
+2. Add IMU and PID features back one layer at a time.
 
-Use a hardware-first workflow.
+## Current Version Scope
 
-1. Edit extension source in VS Code only.
-2. Commit and push from VS Code only.
-3. In MakeCode, import extension and test on real hardware.
-4. Avoid simulator for IMU validation (simulator is only for basic code-path checks).
+Version `0.2.0` is a TypeScript-only minimal baseline with no native C++ shims.
 
-Why: this avoids most C++ shim/simulator edge cases and keeps classroom flow simple.
+Exported APIs:
 
-## Hardware Setup
+1. `init()`
+2. `shimSanityCheck()`
 
-Target board: micro:bit v2 or v2.2
+Behavior:
 
-MPU6050 wiring:
+1. `init()` marks an internal initialized flag.
+2. `shimSanityCheck()` returns `true` only after `init()` was called.
 
-1. VCC -> 3V
-2. GND -> GND
-3. SDA -> P20
-4. SCL -> P19
+## Import Test (First Gate)
 
-Notes:
+In a brand-new MakeCode project, import:
 
-1. Default MPU6050 I2C address in this extension is 0x68 (AD0 tied low).
-2. Connect micro:bit to PC by USB for flashing and serial graph viewing.
+1. `https://github.com/kwleung-cityu/drone-imu#v0.2.0`
 
-## Use as Extension in MakeCode
+Then run only:
 
-1. Open https://makecode.microbit.org/
-2. Create a new project.
-3. Open Extensions.
-4. Import this GitHub repository (https://github.com/kwleung-cityu/drone-imu.git) URL.
-5. Confirm a new Drone IMU category appears in toolbox.
+```python
+basic.show_string("HELLO")
+```
 
-If Drone IMU appears, extension import is successful.
-
-## Quick Python Smoke Test
-
-Paste in MakeCode Python view:
+If this works, run:
 
 ```python
 droneIMU.init()
-ok = droneIMU.shim_sanity_check()
+ok = droneIMU.shimSanityCheck()
 if ok:
-	basic.show_string("OK")
+    basic.show_string("OK")
 else:
-	basic.show_string("ERR")
+    basic.show_string("ERR")
 ```
 
-Expected:
+## Next Rebuild Plan
 
-1. On real hardware with sensor connected, should show OK.
-2. If ERR, check wiring, power, and I2C lines.
+After the baseline import is stable:
 
-## 100 Hz Test + Serial Graph
-
-Paste in MakeCode Python view:
-
-```python
-droneIMU.init()
-
-last_log = 0
-
-while True:
-	start_tick = input.running_time()
-	telemetry = droneIMU.read_processed_data()
-
-	gx = telemetry[3]
-	gy = telemetry[4]
-
-	now = input.running_time()
-	if now - last_log >= 20:
-		serial.write_value("RollRate", gx)
-		serial.write_value("PitchRate", gy)
-		last_log = now
-
-	loop_duration = input.running_time() - start_tick
-	if loop_duration < 10:
-		basic.pause(10 - loop_duration)
-```
-
-Then:
-
-1. Flash to micro:bit.
-2. Open serial/data viewer in MakeCode.
-3. Watch RollRate and PitchRate traces.
-
-## PID API (Extension)
-
-Available APIs:
-
-1. init()
-2. shimSanityCheck() -> boolean
-3. readRollRate() -> number
-4. readPitchRate() -> number
-5. readYawRate() -> number
-6. readAccelX() -> number
-7. readAccelY() -> number
-8. readAccelZ() -> number
-9. configurePID(kp, ki, kd, outMin, outMax)
-10. resetPID()
-11. updatePID(setpoint, measurement, dtMs) -> number
-
-## Sync Strategy That Avoids Conflicts
-
-Single-writer rule:
-
-1. VS Code is the only edit/commit place for extension source.
-2. MakeCode is for importing/pulling and running tests.
-3. Do not edit the same extension files in both places.
-
-If MakeCode shows upload arrows without intentional edits:
-
-1. Inspect diff in MakeCode GitHub panel.
-2. Discard local web changes unless they are intentional.
-
-## Repository Files (Core)
-
-1. [droneIMU.cpp](droneIMU.cpp): native MPU6050 driver and native PID logic.
-2. [main.ts](main.ts): public extension APIs and wrappers.
-3. [shims.d.ts](shims.d.ts): native shim declarations.
-4. [sim/droneIMU.ts](sim/droneIMU.ts): simulator shim backend.
-5. [test.ts](test.ts): local top-level harness for extension development.
-
-## Classroom Suggestion
-
-For beginner classes:
-
-1. Keep extension stable during class.
-2. Students import extension in normal MakeCode projects.
-3. Students code in Python only; no GitHub sync operations needed.
+1. Add TS-only scalar read APIs.
+2. Add simulated/static IMU data path.
+3. Re-introduce native C++ shim declarations.
+4. Re-introduce `droneIMU.cpp` features incrementally.
+5. Add PID APIs last.
