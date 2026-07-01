@@ -46,7 +46,7 @@ namespace droneIMU {
      * Reads all active orientation rates from the IMU.
      * Returns an array: [AccelX(G), AccelY(G), AccelZ(G), GyroX(deg/s), GyroY(deg/s), GyroZ(deg/s)]
      */
-    //% block="read processed IMU values"
+    //% blockHidden=true
     export function readProcessedData(): number[] {
         if (!nativeAvailable) return [0, 0, 0, 0, 0, 0];
 
@@ -81,6 +81,36 @@ namespace droneIMU {
     //% blockHidden=true
     export function read_processed_data(): number[] {
         return readProcessedData();
+    }
+
+    //% block="read roll rate (deg/s)"
+    export function readRollRate(): number {
+        return readProcessedData()[3];
+    }
+
+    //% blockHidden=true
+    export function read_roll_rate(): number {
+        return readRollRate();
+    }
+
+    //% block="read pitch rate (deg/s)"
+    export function readPitchRate(): number {
+        return readProcessedData()[4];
+    }
+
+    //% blockHidden=true
+    export function read_pitch_rate(): number {
+        return readPitchRate();
+    }
+
+    //% block="read yaw rate (deg/s)"
+    export function readYawRate(): number {
+        return readProcessedData()[5];
+    }
+
+    //% blockHidden=true
+    export function read_yaw_rate(): number {
+        return readYawRate();
     }
 
     //% block="configure PID kp $kp ki $ki kd $kd min $outMin max $outMax"

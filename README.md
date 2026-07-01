@@ -100,10 +100,13 @@ Available APIs:
 
 1. init()
 2. shimSanityCheck() -> boolean
-3. readProcessedData() -> [ax, ay, az, gx, gy, gz]
+3. readProcessedData() -> [ax, ay, az, gx, gy, gz] (JS/Python-oriented)
 4. configurePID(kp, ki, kd, outMin, outMax)
 5. resetPID()
 6. updatePID(setpoint, measurement, dtMs) -> number
+7. readRollRate() -> number
+8. readPitchRate() -> number
+9. readYawRate() -> number
 
 Python aliases are also available and recommended in MakeCode Python when name-conversion bugs appear:
 
