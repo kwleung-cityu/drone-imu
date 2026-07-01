@@ -1,55 +1,61 @@
-# Drone IMU (Reset Baseline)
+# Drone IMU Extension
 
-This repository is currently in a troubleshooting reset mode.
+This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Goal:
+Current build signature: `V3-MIN-SIG-20260701-D`
+Current build signature code: `41005`
 
-1. Verify extension import stability first.
-2. Add IMU and PID features back one layer at a time.
+## Files
 
-## Current Version Scope
+1. `pxt.json`
+2. `main.ts`
+3. `README.md`
 
-Version `0.2.4` is an ultra-minimal TypeScript-only baseline with no native C++ shims.
+## IMPORTANT
 
-Exported APIs:
+Do **NOT** rely on standard MakeCode **Extensions** Git URL import for this repository.
+It may load stale package metadata and old APIs.
 
-1. `init()`
-2. `shimSanityCheck()`
+Use this workflow instead:
 
-Behavior:
+1. Open your project `pxt.json` in MakeCode.
+2. Pin dependency directly to a release tag:
 
-1. `init()` marks an internal initialized flag.
-2. `shimSanityCheck()` returns `true` only after `init()` was called.
-
-## Import Test (First Gate)
-
-In a brand-new MakeCode project, import:
-
-1. `https://github.com/kwleung-cityu/drone-imu#v0.2.4`
-
-Then run only:
-
-```python
-basic.show_string("HELLO")
+```json
+"dependencies": {
+    "core": "*",
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.5"
+}
 ```
 
-If this works, run:
+3. Save `pxt.json` and let MakeCode reload packages.
+
+This method is confirmed to fetch the correct tagged version without creating a new repo or project.
+
+## Verify Loaded Version
+
+Use this Python probe after updating dependency tag:
 
 ```python
-droneIMU.init()
-ok = droneIMU.shimSanityCheck()
-if ok:
-    basic.show_string("OK")
-else:
-    basic.show_string("ERR")
+serial.write_value("probe", droneIMUV3.releaseProbe105())
+serial.write_value("sig", droneIMUV3.buildSignatureCode())
 ```
 
-## Next Rebuild Plan
+Expected for `v1.0.5`:
 
-After the baseline import is stable:
+1. `probe:105`
+2. `sig:41005`
 
-1. Add TS-only scalar read APIs.
-2. Add simulated/static IMU data path.
-3. Re-introduce native C++ shim declarations.
-4. Re-introduce `droneIMU.cpp` features incrementally.
-5. Add PID APIs last.
+If values do not match, MakeCode is still using stale package content.
+
+## Python Quick Check
+
+```python
+droneIMUV3.init()
+basic.show_string("T")
+serial.write_value("probe", droneIMUV3.releaseProbe105())
+serial.write_value("sig", droneIMUV3.buildSignatureCode())
+basic.show_string("Y")
+```
+
+If this works, your dependency pin is healthy and you can proceed with feature development.
