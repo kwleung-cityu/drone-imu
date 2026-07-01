@@ -38,7 +38,7 @@ Notes:
 1. Open https://makecode.microbit.org/
 2. Create a new project.
 3. Open Extensions.
-4. Import this GitHub repository URL.
+4. Import this GitHub repository (https://github.com/kwleung-cityu/drone-imu.git) URL.
 5. Confirm a new Drone IMU category appears in toolbox.
 
 If Drone IMU appears, extension import is successful.
@@ -50,7 +50,10 @@ Paste in MakeCode Python view:
 ```python
 droneIMU.init()
 ok = droneIMU.shim_sanity_check()
-basic.show_string("OK" if ok else "ERR")
+if ok:
+	basic.show_string("OK")
+else:
+	basic.show_string("ERR")
 ```
 
 Expected:
@@ -101,6 +104,14 @@ Available APIs:
 4. configurePID(kp, ki, kd, outMin, outMax)
 5. resetPID()
 6. updatePID(setpoint, measurement, dtMs) -> number
+
+Python aliases are also available and recommended in MakeCode Python when name-conversion bugs appear:
+
+1. shim_sanity_check()
+2. read_processed_data()
+3. configure_pid(kp, ki, kd, outMin, outMax)
+4. reset_pid()
+5. update_pid(setpoint, measurement, dtMs)
 
 ## Sync Strategy That Avoids Conflicts
 

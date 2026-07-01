@@ -36,6 +36,12 @@ namespace droneIMU {
         }
     }
 
+    // Explicit Python alias to avoid camelCase conversion edge cases in MakeCode Python.
+    //% blockHidden=true
+    export function shim_sanity_check(): boolean {
+        return shimSanityCheck();
+    }
+
     /**
      * Reads all active orientation rates from the IMU.
      * Returns an array: [AccelX(G), AccelY(G), AccelZ(G), GyroX(deg/s), GyroY(deg/s), GyroZ(deg/s)]
@@ -71,6 +77,12 @@ namespace droneIMU {
         return [ax, ay, az, gx, gy, gz];
     }
 
+    // Explicit Python alias to avoid camelCase conversion edge cases in MakeCode Python.
+    //% blockHidden=true
+    export function read_processed_data(): number[] {
+        return readProcessedData();
+    }
+
     //% block="configure PID kp $kp ki $ki kd $kd min $outMin max $outMax"
     export function configurePID(kp: number, ki: number, kd: number, outMin: number, outMax: number): void {
         if (!nativeAvailable) {
@@ -95,6 +107,12 @@ namespace droneIMU {
         }
     }
 
+    // Explicit Python alias to avoid camelCase conversion edge cases in MakeCode Python.
+    //% blockHidden=true
+    export function configure_pid(kp: number, ki: number, kd: number, outMin: number, outMax: number): void {
+        configurePID(kp, ki, kd, outMin, outMax);
+    }
+
     //% block="reset PID"
     export function resetPID(): void {
         if (!nativeAvailable) {
@@ -110,6 +128,12 @@ namespace droneIMU {
             nativeAvailable = false;
             resetPID();
         }
+    }
+
+    // Explicit Python alias to avoid camelCase conversion edge cases in MakeCode Python.
+    //% blockHidden=true
+    export function reset_pid(): void {
+        resetPID();
     }
 
     //% block="PID update setpoint $setpoint measurement $measurement dt ms $dtMs"
@@ -141,5 +165,11 @@ namespace droneIMU {
             nativeAvailable = false;
             return updatePID(setpoint, measurement, dtMs);
         }
+    }
+
+    // Explicit Python alias to avoid camelCase conversion edge cases in MakeCode Python.
+    //% blockHidden=true
+    export function update_pid(setpoint: number, measurement: number, dtMs: number): number {
+        return updatePID(setpoint, measurement, dtMs);
     }
 }
