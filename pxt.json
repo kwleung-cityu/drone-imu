@@ -1,6 +1,6 @@
 {
-    "name": "drone-imu",
-    "version": "0.2.3",
+    "name": "drone-imu-debug",
+    "version": "0.2.4",
     "description": "Minimal baseline extension for troubleshooting",
     "license": "MIT",
     "dependencies": {
@@ -8,5 +8,9 @@
     },
     "files": [
         "main.ts"
-    ]
+    ],
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "blocksprj"
 }

@@ -1,7 +1,7 @@
 /**
  * Drone IMU troubleshooting baseline blocks.
  */
-//% color="#2E7D32" weight=100 icon="\uf2db" block="Drone IMU"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU"
 namespace droneIMU {
     let initialized = false;
 
