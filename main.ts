@@ -22,7 +22,7 @@ namespace droneIMU {
         }
     }
 
-    //% block="IMU shim sanity check"
+    //% blockHidden=true
     export function shimSanityCheck(): boolean {
         if (!nativeAvailable) return false;
 
@@ -36,18 +36,9 @@ namespace droneIMU {
         }
     }
 
-    // Explicit Python alias to avoid camelCase conversion edge cases in MakeCode Python.
-    //% blockHidden=true
-    export function shim_sanity_check(): boolean {
-        return shimSanityCheck();
-    }
 
-    /**
-     * Reads all active orientation rates from the IMU.
-     * Returns an array: [AccelX(G), AccelY(G), AccelZ(G), GyroX(deg/s), GyroY(deg/s), GyroZ(deg/s)]
-     */
-    //% blockHidden=true
-    export function readProcessedData(): number[] {
+    // Internal helper used by scalar-safe public APIs.
+    function readProcessedDataCore(): number[] {
         if (!nativeAvailable) return [0, 0, 0, 0, 0, 0];
 
         let buf = pins.createBuffer(0);
@@ -77,43 +68,40 @@ namespace droneIMU {
         return [ax, ay, az, gx, gy, gz];
     }
 
-    // Explicit Python alias to avoid camelCase conversion edge cases in MakeCode Python.
     //% blockHidden=true
-    export function read_processed_data(): number[] {
-        return readProcessedData();
-    }
-
-    //% block="read roll rate (deg/s)"
     export function readRollRate(): number {
-        return readProcessedData()[3];
+        return readProcessedDataCore()[3];
     }
+
 
     //% blockHidden=true
-    export function read_roll_rate(): number {
-        return readRollRate();
-    }
-
-    //% block="read pitch rate (deg/s)"
     export function readPitchRate(): number {
-        return readProcessedData()[4];
+        return readProcessedDataCore()[4];
     }
+
 
     //% blockHidden=true
-    export function read_pitch_rate(): number {
-        return readPitchRate();
-    }
-
-    //% block="read yaw rate (deg/s)"
     export function readYawRate(): number {
-        return readProcessedData()[5];
+        return readProcessedDataCore()[5];
     }
 
     //% blockHidden=true
-    export function read_yaw_rate(): number {
-        return readYawRate();
+    export function readAccelX(): number {
+        return readProcessedDataCore()[0];
     }
 
-    //% block="configure PID kp $kp ki $ki kd $kd min $outMin max $outMax"
+    //% blockHidden=true
+    export function readAccelY(): number {
+        return readProcessedDataCore()[1];
+    }
+
+    //% blockHidden=true
+    export function readAccelZ(): number {
+        return readProcessedDataCore()[2];
+    }
+
+
+    //% blockHidden=true
     export function configurePID(kp: number, ki: number, kd: number, outMin: number, outMax: number): void {
         if (!nativeAvailable) {
             simKp = kp;
@@ -137,13 +125,8 @@ namespace droneIMU {
         }
     }
 
-    // Explicit Python alias to avoid camelCase conversion edge cases in MakeCode Python.
-    //% blockHidden=true
-    export function configure_pid(kp: number, ki: number, kd: number, outMin: number, outMax: number): void {
-        configurePID(kp, ki, kd, outMin, outMax);
-    }
 
-    //% block="reset PID"
+    //% blockHidden=true
     export function resetPID(): void {
         if (!nativeAvailable) {
             simIntegral = 0;
@@ -160,13 +143,8 @@ namespace droneIMU {
         }
     }
 
-    // Explicit Python alias to avoid camelCase conversion edge cases in MakeCode Python.
-    //% blockHidden=true
-    export function reset_pid(): void {
-        resetPID();
-    }
 
-    //% block="PID update setpoint $setpoint measurement $measurement dt ms $dtMs"
+    //% blockHidden=true
     export function updatePID(setpoint: number, measurement: number, dtMs: number): number {
         if (!nativeAvailable) {
             let dt = dtMs / 1000;
@@ -197,9 +175,4 @@ namespace droneIMU {
         }
     }
 
-    // Explicit Python alias to avoid camelCase conversion edge cases in MakeCode Python.
-    //% blockHidden=true
-    export function update_pid(setpoint: number, measurement: number, dtMs: number): number {
-        return updatePID(setpoint, measurement, dtMs);
-    }
 }

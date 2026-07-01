@@ -100,21 +100,15 @@ Available APIs:
 
 1. init()
 2. shimSanityCheck() -> boolean
-3. readProcessedData() -> [ax, ay, az, gx, gy, gz] (JS/Python-oriented)
-4. configurePID(kp, ki, kd, outMin, outMax)
-5. resetPID()
-6. updatePID(setpoint, measurement, dtMs) -> number
-7. readRollRate() -> number
-8. readPitchRate() -> number
-9. readYawRate() -> number
-
-Python aliases are also available and recommended in MakeCode Python when name-conversion bugs appear:
-
-1. shim_sanity_check()
-2. read_processed_data()
-3. configure_pid(kp, ki, kd, outMin, outMax)
-4. reset_pid()
-5. update_pid(setpoint, measurement, dtMs)
+3. readRollRate() -> number
+4. readPitchRate() -> number
+5. readYawRate() -> number
+6. readAccelX() -> number
+7. readAccelY() -> number
+8. readAccelZ() -> number
+9. configurePID(kp, ki, kd, outMin, outMax)
+10. resetPID()
+11. updatePID(setpoint, measurement, dtMs) -> number
 
 ## Sync Strategy That Avoids Conflicts
 
