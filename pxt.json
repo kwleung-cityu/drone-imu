@@ -1,34 +1,12 @@
 {
     "name": "drone-imu",
-    "version": "0.2.0",
-    "description": "High-speed 100Hz MPU6050 hardware driver for student quadcopter kits",
+    "version": "0.2.1",
+    "description": "Minimal baseline extension for troubleshooting",
     "license": "MIT",
     "dependencies": {
         "core": "*"
     },
     "files": [
         "main.ts"
-    ],
-    "testFiles": [
-        "test.ts"
-    ],
-    "targetVersions": {
-        "branch": "v5",
-        "target": "8.0.22",
-        "targetId": "microbit"
-    },
-    "supportedTargets": [
-        "microbit"
-    ],
-    "preferredEditor": "tsprj",
-    "pxt": {
-        "extension": true,
-        "yotta": {
-            "config": {
-                "pxt-microbit": {
-                    "variant": "nrf52833"
-                }
-            }
-        }
-    }
+    ]
 }

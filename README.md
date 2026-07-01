@@ -9,7 +9,7 @@ Goal:
 
 ## Current Version Scope
 
-Version `0.2.0` is a TypeScript-only minimal baseline with no native C++ shims.
+Version `0.2.1` is an ultra-minimal TypeScript-only baseline with no native C++ shims.
 
 Exported APIs:
 
@@ -25,7 +25,7 @@ Behavior:
 
 In a brand-new MakeCode project, import:
 
-1. `https://github.com/kwleung-cityu/drone-imu#v0.2.0`
+1. `https://github.com/kwleung-cityu/drone-imu#v0.2.1`
 
 Then run only:
 
