@@ -1,6 +1,6 @@
 {
     "name": "drone-imu",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "Minimal baseline extension for troubleshooting",
     "license": "MIT",
     "dependencies": {

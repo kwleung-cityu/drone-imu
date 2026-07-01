@@ -1,10 +1,22 @@
+/**
+ * Drone IMU troubleshooting baseline blocks.
+ */
 //% color="#2E7D32" weight=100 icon="\uf2db" block="Drone IMU"
 namespace droneIMU {
     let initialized = false;
 
-    //% block="initialize IMU"
+    //% blockId=droneimu_init block="initialize IMU"
+    //% group="Basics"
+    //% weight=100
     export function init(): void {
         initialized = true;
+    }
+
+    //% blockId=droneimu_ready block="IMU initialized?"
+    //% group="Basics"
+    //% weight=90
+    export function isReady(): boolean {
+        return initialized;
     }
 
     //% blockHidden=true
