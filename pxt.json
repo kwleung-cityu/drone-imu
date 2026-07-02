@@ -7,9 +7,7 @@
         "core": "*"
     },
     "files": [
-        "shims.d.ts",
-        "droneIMU.cpp",
-        "main.ts"
+          "main.ts"
     ],
     "supportedTargets": [
         "microbit"

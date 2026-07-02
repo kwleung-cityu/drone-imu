@@ -13,11 +13,6 @@ namespace droneIMUV3 {
         initialized = true
     }
 
-    //% blockHidden=true
-    export function initHardware(): void {
-        initMPU6050()
-    }
-
     //% blockId=droneimuv3_initsimple block="initialize IMU (simple)"
     //% weight=95
     export function initSimple(): void {
