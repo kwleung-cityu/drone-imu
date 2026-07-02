@@ -1,12 +1,14 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.5",
-    "description": "Drone IMU V3 minimal pure TypeScript diagnostic build v105",
+    "version": "1.0.6",
+    "description": "Drone IMU V3 minimal build with first native initMPU6050 shim",
     "license": "MIT",
     "dependencies": {
         "core": "*"
     },
     "files": [
+        "shims.d.ts",
+        "droneIMU.cpp",
         "main.ts"
     ],
     "supportedTargets": [
