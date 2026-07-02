@@ -1,4 +1,4 @@
 declare namespace droneIMUV3 {
-	//% shim=droneIMUV3::initMPU6050
-	function initMPU6050(): void;
+	//% shim=droneIMUV3::nativeConst123
+	function nativeConst123(): number;
 }

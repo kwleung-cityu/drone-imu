@@ -1,10 +1,11 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.11",
-    "description": "Drone IMU V3 hidden hardware init shim test release",
+    "version": "1.0.13",
+    "description": "Drone IMU V3 native constant shim test release",
     "license": "MIT",
     "dependencies": {
-        "core": "*"
+        "core": "*",
+        "microphone": "*"
     },
     "files": [
         "shims.d.ts",

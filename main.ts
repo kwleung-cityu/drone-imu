@@ -1,10 +1,10 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 111"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 113"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260702-I"
-    const BUILD_SIGNATURE_CODE = 41011
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260702-K"
+    const BUILD_SIGNATURE_CODE = 41013
     let initialized = false
 
     //% blockId=droneimuv3_init block="initialize IMU"
@@ -19,11 +19,6 @@ namespace droneIMUV3 {
         initialized = true
     }
 
-    //% blockHidden=true
-    export function initHardware(): void {
-        initMPU6050()
-    }
-
     //% blockId=droneimuv3_buildsig block="build signature"
     //% weight=90
     export function buildSignature(): string {
@@ -34,6 +29,12 @@ namespace droneIMUV3 {
     //% weight=89
     export function buildSignatureCode(): number {
         return BUILD_SIGNATURE_CODE
+    }
+
+    //% blockId=droneimuv3_nativeconst block="native constant"
+    //% weight=89
+    export function nativeConstant(): number {
+        return nativeConst123()
     }
 
     //% blockId=droneimuv3_ping block="ping"
@@ -60,9 +61,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe111 block="release probe 111"
+    //% blockId=droneimuv3_releaseprobe113 block="release probe 113"
     //% weight=84
-    export function releaseProbe111(): number {
-        return 111
+    export function releaseProbe113(): number {
+        return 113
     }
 }
