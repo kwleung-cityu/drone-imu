@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.6",
-    "description": "Drone IMU V3 minimal build with first native initMPU6050 shim",
+    "version": "1.0.7",
+    "description": "Drone IMU V3 native shim isolated behind optional hardware init",
     "license": "MIT",
     "dependencies": {
         "core": "*"

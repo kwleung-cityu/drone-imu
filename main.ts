@@ -3,22 +3,19 @@
  */
 //% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 106"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260702-E"
-    const BUILD_SIGNATURE_CODE = 41006
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260702-F"
+    const BUILD_SIGNATURE_CODE = 41007
     let initialized = false
-    let nativeAvailable = true
 
     //% blockId=droneimuv3_init block="initialize IMU"
     //% weight=100
     export function init(): void {
         initialized = true
-        if (!nativeAvailable) return
+    }
 
-        try {
-            initMPU6050()
-        } catch (e) {
-            nativeAvailable = false
-        }
+    //% blockHidden=true
+    export function initHardware(): void {
+        initMPU6050()
     }
 
     //% blockId=droneimuv3_initsimple block="initialize IMU (simple)"
@@ -61,5 +58,11 @@ namespace droneIMUV3 {
     //% weight=85
     export function releaseProbe106(): number {
         return 106
+    }
+
+    //% blockId=droneimuv3_releaseprobe107 block="release probe 107"
+    //% weight=84
+    export function releaseProbe107(): number {
+        return 107
     }
 }

@@ -2,8 +2,8 @@
 
 This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Current build signature: `V3-MIN-SIG-20260702-E`
-Current build signature code: `41006`
+Current build signature: `V3-MIN-SIG-20260702-F`
+Current build signature code: `41007`
 
 ## Files
 
@@ -24,7 +24,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.6"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.7"
 }
 ```
 
@@ -41,10 +41,10 @@ serial.write_value("probe", droneIMUV3.releaseProbe106())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 ```
 
-Expected for `v1.0.6`:
+Expected for `v1.0.7`:
 
-1. `probe:106`
-2. `sig:41006`
+1. `probe:107`
+2. `sig:41007`
 
 If values do not match, MakeCode is still using stale package content.
 
@@ -57,5 +57,7 @@ serial.write_value("probe", droneIMUV3.releaseProbe106())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 basic.show_string("Y")
 ```
+
+To test the native step later, call `droneIMUV3.initHardware()` explicitly.
 
 If this works, your dependency pin is healthy and you can proceed with feature development.
