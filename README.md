@@ -2,8 +2,8 @@
 
 This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Current build signature: `V3-MIN-SIG-20260702-F`
-Current build signature code: `41007`
+Current build signature: `V3-MIN-SIG-20260702-G`
+Current build signature code: `41009`
 
 ## Files
 
@@ -24,7 +24,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.7"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.9"
 }
 ```
 
@@ -41,10 +41,10 @@ serial.write_value("probe", droneIMUV3.releaseProbe106())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 ```
 
-Expected for `v1.0.7`:
+Expected for `v1.0.9`:
 
-1. `probe:107`
-2. `sig:41007`
+1. `probe:109`
+2. `sig:41009`
 
 If values do not match, MakeCode is still using stale package content.
 
@@ -53,7 +53,7 @@ If values do not match, MakeCode is still using stale package content.
 ```python
 droneIMUV3.init()
 basic.show_string("T")
-serial.write_value("probe", droneIMUV3.releaseProbe106())
+serial.write_value("probe", droneIMUV3.releaseProbe109())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 basic.show_string("Y")
 ```
