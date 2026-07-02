@@ -6,11 +6,9 @@
     "dependencies": {
         "core": "*"
     },
-        "files": [
-            "shims.d.ts",
-            "droneIMU.cpp",
-            "main.ts"
-        ],
+    "files": [
+        "main.ts"
+    ],
     "supportedTargets": [
         "microbit"
     ]
