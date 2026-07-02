@@ -2,8 +2,8 @@
 
 This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Current build signature: `V3-MIN-SIG-20260702-K`
-Current build signature code: `41013`
+Current build signature: `V3-MIN-SIG-20260702-L`
+Current build signature code: `41014`
 
 ## Files
 
@@ -24,7 +24,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.13"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.14"
 }
 ```
 
@@ -37,14 +37,14 @@ This method is confirmed to fetch the correct tagged version without creating a 
 Use this Python probe after updating dependency tag:
 
 ```python
-serial.write_value("probe", droneIMUV3.releaseProbe113())
+serial.write_value("probe", droneIMUV3.releaseProbe114())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 ```
 
-Expected for `v1.0.13`:
+Expected for `v1.0.14`:
 
-1. `probe:113`
-2. `sig:41013`
+1. `probe:114`
+2. `sig:41014`
 
 If values do not match, MakeCode is still using stale package content.
 
@@ -53,10 +53,12 @@ If values do not match, MakeCode is still using stale package content.
 ```python
 droneIMUV3.init()
 basic.show_string("T")
-serial.write_value("probe", droneIMUV3.releaseProbe113())
+serial.write_value("probe", droneIMUV3.releaseProbe114())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 basic.show_string("Y")
 ```
+
+For hardware verification, `droneIMUV3.hardwareWhoAmI()` should return `104` when AD0 is tied to GND.
 
 For native verification, `droneIMUV3.nativeConstant()` should return `123`.
 

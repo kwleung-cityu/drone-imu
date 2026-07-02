@@ -1,10 +1,10 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 113"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 114"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260702-K"
-    const BUILD_SIGNATURE_CODE = 41013
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260702-L"
+    const BUILD_SIGNATURE_CODE = 41014
     let initialized = false
 
     //% blockId=droneimuv3_init block="initialize IMU"
@@ -31,14 +31,21 @@ namespace droneIMUV3 {
         return BUILD_SIGNATURE_CODE
     }
 
-    //% blockId=droneimuv3_nativeconst block="native constant"
+    //% blockId=droneimuv3_hwwhoami block="hardware WHO_AM_I"
     //% weight=89
+    export function hardwareWhoAmI(): number {
+        pins.i2cWriteNumber(0x68, 0x75, NumberFormat.UInt8LE, true)
+        return pins.i2cReadNumber(0x68, NumberFormat.UInt8LE, false)
+    }
+
+    //% blockId=droneimuv3_nativeconst block="native constant"
+    //% weight=88
     export function nativeConstant(): number {
         return nativeConst123()
     }
 
     //% blockId=droneimuv3_ping block="ping"
-    //% weight=88
+    //% weight=87
     export function ping(): boolean {
         return initialized
     }
@@ -61,9 +68,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe113 block="release probe 113"
-    //% weight=84
-    export function releaseProbe113(): number {
-        return 113
+    //% blockId=droneimuv3_releaseprobe114 block="release probe 114"
+    //% weight=83
+    export function releaseProbe114(): number {
+        return 114
     }
 }
