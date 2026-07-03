@@ -1,10 +1,10 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 122"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 123"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-H"
-    const BUILD_SIGNATURE_CODE = 41022
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-I"
+    const BUILD_SIGNATURE_CODE = 41023
     const MPU_ADDR_68 = 0x68
     const MPU_ADDR_69 = 0x69
     const REG_PWR_MGMT_1 = 0x6B
@@ -36,7 +36,17 @@ namespace droneIMUV3 {
     }
 
     function writeReg(addr: number, reg: number, value: number): void {
-        pins.i2cWriteNumber(addr, (reg << 8) | value, NumberFormat.UInt16BE, false)
+        const b = pins.createBuffer(2)
+        b[0] = reg
+        b[1] = value
+        pins.i2cWriteBuffer(addr, b, false)
+    }
+
+    function configureAt(addr: number): void {
+        writeReg(addr, REG_PWR_MGMT_1, 0x00)
+        basic.pause(5)
+        writeReg(addr, REG_GYRO_CONFIG, 0x08)
+        basic.pause(5)
     }
 
     function packetLooksAlive(p: Buffer): boolean {
@@ -112,14 +122,14 @@ namespace droneIMUV3 {
     export function init(): void {
         selectActiveAddress()
 
-        // Configure both addresses to tolerate clone WHO_AM_I behavior and ambiguous detection.
-        writeReg(MPU_ADDR_68, REG_PWR_MGMT_1, 0x00)
-        writeReg(MPU_ADDR_68, REG_GYRO_CONFIG, 0x08)
-        writeReg(MPU_ADDR_69, REG_PWR_MGMT_1, 0x00)
-        writeReg(MPU_ADDR_69, REG_GYRO_CONFIG, 0x08)
+        // Configure selected address first, then fallback address only if packet stays dead.
+        configureAt(activeAddr)
+        if (!updateSnapshot()) {
+            activeAddr = activeAddr == MPU_ADDR_68 ? MPU_ADDR_69 : MPU_ADDR_68
+            configureAt(activeAddr)
+            updateSnapshot()
+        }
 
-        // Re-evaluate active address from actual packet content after configuration.
-        updateSnapshot()
         basic.pause(30)
         initialized = true
         hasLastPacket = false
@@ -166,6 +176,30 @@ namespace droneIMUV3 {
     //% weight=89
     export function whoAmIAt69(): number {
         return whoAmIWithRetry(MPU_ADDR_69)
+    }
+
+    //% blockId=droneimuv3_pwr68 block="PWR_MGMT_1 at 0x68"
+    //% weight=89
+    export function pwrMgmtAt68(): number {
+        return readReg(MPU_ADDR_68, REG_PWR_MGMT_1)
+    }
+
+    //% blockId=droneimuv3_pwr69 block="PWR_MGMT_1 at 0x69"
+    //% weight=89
+    export function pwrMgmtAt69(): number {
+        return readReg(MPU_ADDR_69, REG_PWR_MGMT_1)
+    }
+
+    //% blockId=droneimuv3_gyrocfg68 block="GYRO_CONFIG at 0x68"
+    //% weight=89
+    export function gyroConfigAt68(): number {
+        return readReg(MPU_ADDR_68, REG_GYRO_CONFIG)
+    }
+
+    //% blockId=droneimuv3_gyrocfg69 block="GYRO_CONFIG at 0x69"
+    //% weight=89
+    export function gyroConfigAt69(): number {
+        return readReg(MPU_ADDR_69, REG_GYRO_CONFIG)
     }
 
     //% blockId=droneimuv3_activeaddr block="active I2C address"
@@ -309,6 +343,22 @@ namespace droneIMUV3 {
         return activeI2cAddress()
     }
 
+    export function pwr_mgmt_at_68(): number {
+        return pwrMgmtAt68()
+    }
+
+    export function pwr_mgmt_at_69(): number {
+        return pwrMgmtAt69()
+    }
+
+    export function gyro_config_at_68(): number {
+        return gyroConfigAt68()
+    }
+
+    export function gyro_config_at_69(): number {
+        return gyroConfigAt69()
+    }
+
     export function refresh_sensor_snapshot(): boolean {
         return refreshSensorSnapshot()
     }
@@ -359,9 +409,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe122 block="release probe 122"
+    //% blockId=droneimuv3_releaseprobe123 block="release probe 123"
     //% weight=83
-    export function releaseProbe122(): number {
-        return 122
+    export function releaseProbe123(): number {
+        return 123
     }
 }

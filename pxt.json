@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.22",
-    "description": "Drone IMU V3 packet-based address fallback and dual-address init",
+    "version": "1.0.23",
+    "description": "Drone IMU V3 stable init write path and register diagnostics",
     "license": "MIT",
     "dependencies": {
         "core": "*"
