@@ -2,8 +2,8 @@
 
 This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Current build signature: `V3-MIN-SIG-20260703-A`
-Current build signature code: `41015`
+Current build signature: `V3-MIN-SIG-20260703-B`
+Current build signature code: `41016`
 
 ## Files
 
@@ -24,7 +24,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.15"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.16"
 }
 ```
 
@@ -37,14 +37,14 @@ This method is confirmed to fetch the correct tagged version without creating a 
 Use this Python probe after updating dependency tag:
 
 ```python
-serial.write_value("probe", droneIMUV3.releaseProbe115())
+serial.write_value("probe", droneIMUV3.releaseProbe116())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 ```
 
-Expected for `v1.0.15`:
+Expected for `v1.0.16`:
 
-1. `probe:115`
-2. `sig:41015`
+1. `probe:116`
+2. `sig:41016`
 
 If values do not match, MakeCode is still using stale package content.
 
@@ -53,7 +53,7 @@ If values do not match, MakeCode is still using stale package content.
 ```python
 droneIMUV3.init()
 basic.show_string("T")
-serial.write_value("probe", droneIMUV3.releaseProbe115())
+serial.write_value("probe", droneIMUV3.releaseProbe116())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 basic.show_string("Y")
 ```
@@ -61,6 +61,8 @@ basic.show_string("Y")
 For hardware verification, `droneIMUV3.hardwareWhoAmI()` should return `104` when AD0 is tied to GND.
 
 `droneIMUV3.readSensorPacketValid()` should return `true` when a 14-byte packet is received.
+
+Use `droneIMUV3.refreshSensorSnapshot()` before reading roll/pitch/yaw if you want all three values from the same burst packet.
 
 `droneIMUV3.readRollRate()`, `droneIMUV3.readPitchRate()`, and `droneIMUV3.readYawRate()` provide gyro rates in deg/s.
 
