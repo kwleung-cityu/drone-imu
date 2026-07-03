@@ -1,15 +1,31 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 114"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 115"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260702-L"
-    const BUILD_SIGNATURE_CODE = 41014
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-A"
+    const BUILD_SIGNATURE_CODE = 41015
+    const MPU_ADDR = 0x68
+    const REG_PWR_MGMT_1 = 0x6B
+    const REG_ACCEL_XOUT_H = 0x3B
     let initialized = false
+
+    function i16be(buf: Buffer, idx: number): number {
+        let v = (buf[idx] << 8) | buf[idx + 1]
+        if (v & 0x8000) v = v - 65536
+        return v
+    }
+
+    function readSensorPacketInternal(): Buffer {
+        pins.i2cWriteNumber(MPU_ADDR, REG_ACCEL_XOUT_H, NumberFormat.UInt8LE, true)
+        return pins.i2cReadBuffer(MPU_ADDR, 14, false)
+    }
 
     //% blockId=droneimuv3_init block="initialize IMU"
     //% weight=100
     export function init(): void {
+        pins.i2cWriteNumber(MPU_ADDR, REG_PWR_MGMT_1, NumberFormat.UInt8LE)
+        pins.i2cWriteNumber(MPU_ADDR, 0x01, NumberFormat.UInt8LE)
         initialized = true
     }
 
@@ -34,8 +50,39 @@ namespace droneIMUV3 {
     //% blockId=droneimuv3_hwwhoami block="hardware WHO_AM_I"
     //% weight=89
     export function hardwareWhoAmI(): number {
-        pins.i2cWriteNumber(0x68, 0x75, NumberFormat.UInt8LE, true)
-        return pins.i2cReadNumber(0x68, NumberFormat.UInt8LE, false)
+        pins.i2cWriteNumber(MPU_ADDR, 0x75, NumberFormat.UInt8LE, true)
+        return pins.i2cReadNumber(MPU_ADDR, NumberFormat.UInt8LE, false)
+    }
+
+    //% blockId=droneimuv3_readsensorpacket block="read sensor packet valid"
+    //% weight=88
+    export function readSensorPacketValid(): boolean {
+        const packet = readSensorPacketInternal()
+        return !!packet && packet.length === 14
+    }
+
+    //% blockId=droneimuv3_read_roll block="read roll rate deg/s"
+    //% weight=87
+    export function readRollRate(): number {
+        const p = readSensorPacketInternal()
+        if (!p || p.length < 14) return 0
+        return i16be(p, 8) / 65.5
+    }
+
+    //% blockId=droneimuv3_read_pitch block="read pitch rate deg/s"
+    //% weight=86
+    export function readPitchRate(): number {
+        const p = readSensorPacketInternal()
+        if (!p || p.length < 14) return 0
+        return i16be(p, 10) / 65.5
+    }
+
+    //% blockId=droneimuv3_read_yaw block="read yaw rate deg/s"
+    //% weight=85
+    export function readYawRate(): number {
+        const p = readSensorPacketInternal()
+        if (!p || p.length < 14) return 0
+        return i16be(p, 12) / 65.5
     }
 
     //% blockId=droneimuv3_nativeconst block="native constant"
@@ -68,9 +115,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe114 block="release probe 114"
+    //% blockId=droneimuv3_releaseprobe115 block="release probe 115"
     //% weight=83
-    export function releaseProbe114(): number {
-        return 114
+    export function releaseProbe115(): number {
+        return 115
     }
 }

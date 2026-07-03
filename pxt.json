@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.14",
-    "description": "Drone IMU V3 TS WHO_AM_I test with native constant shim",
+    "version": "1.0.15",
+    "description": "Drone IMU V3 TS burst sensor read and gyro scalar APIs",
     "license": "MIT",
     "dependencies": {
         "core": "*",
