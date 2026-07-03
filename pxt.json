@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.24",
-    "description": "Drone IMU V3 fixed 0x68 default path with manual address override",
+    "version": "1.0.25",
+    "description": "Drone IMU V3 direct gyro register read path",
     "license": "MIT",
     "dependencies": {
         "core": "*"

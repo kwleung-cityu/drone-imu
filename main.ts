@@ -1,16 +1,19 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 124"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 125"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-J"
-    const BUILD_SIGNATURE_CODE = 41024
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-K"
+    const BUILD_SIGNATURE_CODE = 41025
     const MPU_ADDR_68 = 0x68
     const MPU_ADDR_69 = 0x69
     const REG_PWR_MGMT_1 = 0x6B
     const REG_GYRO_CONFIG = 0x1B
     const REG_ACCEL_XOUT_H = 0x3B
     const REG_WHO_AM_I = 0x75
+    const REG_GYRO_XOUT_H = 0x43
+    const REG_GYRO_YOUT_H = 0x45
+    const REG_GYRO_ZOUT_H = 0x47
     let activeAddr = MPU_ADDR_68
     let initialized = false
     let lastPacket = pins.createBuffer(14)
@@ -28,6 +31,14 @@ namespace droneIMUV3 {
     function readReg(addr: number, reg: number): number {
         pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8LE, true)
         return pins.i2cReadNumber(addr, NumberFormat.UInt8LE, false)
+    }
+
+    function readWord(addr: number, regHigh: number): number {
+        const hi = readReg(addr, regHigh)
+        const lo = readReg(addr, regHigh + 1)
+        let v = (hi << 8) | lo
+        if (v & 0x8000) v = v - 65536
+        return v
     }
 
     function readSensorPacketAt(addr: number): Buffer {
@@ -205,43 +216,37 @@ namespace droneIMUV3 {
     //% blockId=droneimuv3_read_roll block="read roll rate deg/s"
     //% weight=87
     export function readRollRate(): number {
-        if (!hasLastPacket && !updateSnapshot()) return 0
-        return (i16be(lastPacket, 8) - gyroBiasX) / 65.5
+        return (readRawGyroX() - gyroBiasX) / 65.5
     }
 
     //% blockId=droneimuv3_read_pitch block="read pitch rate deg/s"
     //% weight=86
     export function readPitchRate(): number {
-        if (!hasLastPacket && !updateSnapshot()) return 0
-        return (i16be(lastPacket, 10) - gyroBiasY) / 65.5
+        return (readRawGyroY() - gyroBiasY) / 65.5
     }
 
     //% blockId=droneimuv3_read_yaw block="read yaw rate deg/s"
     //% weight=85
     export function readYawRate(): number {
-        if (!hasLastPacket && !updateSnapshot()) return 0
-        return (i16be(lastPacket, 12) - gyroBiasZ) / 65.5
+        return (readRawGyroZ() - gyroBiasZ) / 65.5
     }
 
     //% blockId=droneimuv3_raw_gx block="read raw gyro X"
     //% weight=85
     export function readRawGyroX(): number {
-        if (!hasLastPacket && !updateSnapshot()) return 0
-        return i16be(lastPacket, 8)
+        return readWord(activeAddr, REG_GYRO_XOUT_H)
     }
 
     //% blockId=droneimuv3_raw_gy block="read raw gyro Y"
     //% weight=85
     export function readRawGyroY(): number {
-        if (!hasLastPacket && !updateSnapshot()) return 0
-        return i16be(lastPacket, 10)
+        return readWord(activeAddr, REG_GYRO_YOUT_H)
     }
 
     //% blockId=droneimuv3_raw_gz block="read raw gyro Z"
     //% weight=85
     export function readRawGyroZ(): number {
-        if (!hasLastPacket && !updateSnapshot()) return 0
-        return i16be(lastPacket, 12)
+        return readWord(activeAddr, REG_GYRO_ZOUT_H)
     }
 
     //% blockId=droneimuv3_calib_gyro_bias block="calibrate gyro bias samples %samples"
@@ -389,9 +394,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe124 block="release probe 124"
+    //% blockId=droneimuv3_releaseprobe125 block="release probe 125"
     //% weight=83
-    export function releaseProbe124(): number {
-        return 124
+    export function releaseProbe125(): number {
+        return 125
     }
 }
