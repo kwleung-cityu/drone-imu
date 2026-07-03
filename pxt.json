@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.21",
-    "description": "Drone IMU V3 packet sanity checks and raw gyro diagnostics",
+    "version": "1.0.22",
+    "description": "Drone IMU V3 packet-based address fallback and dual-address init",
     "license": "MIT",
     "dependencies": {
         "core": "*"
