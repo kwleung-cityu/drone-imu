@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.18",
-    "description": "Drone IMU V3 gyro bias calibration and Python alias wrappers",
+    "version": "1.0.19",
+    "description": "Drone IMU V3 stable runtime alias API without simulator native crash",
     "license": "MIT",
     "dependencies": {
         "core": "*"

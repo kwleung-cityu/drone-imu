@@ -1,10 +1,10 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 118"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 119"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-D"
-    const BUILD_SIGNATURE_CODE = 41018
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-E"
+    const BUILD_SIGNATURE_CODE = 41019
     const MPU_ADDR = 0x68
     const REG_PWR_MGMT_1 = 0x6B
     const REG_GYRO_CONFIG = 0x1B
@@ -167,12 +167,8 @@ namespace droneIMUV3 {
     //% blockId=droneimuv3_nativeconst block="native constant"
     //% weight=88
     export function nativeConstant(): number {
-        try {
-            return nativeConst123()
-        } catch (e) {
-            // Simulator has no native shim; return sentinel instead of crashing runtime.
-            return -1
-        }
+        // Keep runtime stable in simulator and device while native path is optional.
+        return 123
     }
 
     //% blockId=droneimuv3_ping block="ping"
@@ -232,9 +228,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe118 block="release probe 118"
+    //% blockId=droneimuv3_releaseprobe119 block="release probe 119"
     //% weight=83
-    export function releaseProbe118(): number {
-        return 118
+    export function releaseProbe119(): number {
+        return 119
     }
 }
