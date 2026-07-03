@@ -2,8 +2,8 @@
 
 This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Current build signature: `V3-MIN-SIG-20260703-B`
-Current build signature code: `41016`
+Current build signature: `V3-MIN-SIG-20260703-C`
+Current build signature code: `41017`
 
 ## Files
 
@@ -24,7 +24,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.16"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.17"
 }
 ```
 
@@ -37,14 +37,14 @@ This method is confirmed to fetch the correct tagged version without creating a 
 Use this Python probe after updating dependency tag:
 
 ```python
-serial.write_value("probe", droneIMUV3.releaseProbe116())
+serial.write_value("probe", droneIMUV3.releaseProbe117())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 ```
 
-Expected for `v1.0.16`:
+Expected for `v1.0.17`:
 
-1. `probe:116`
-2. `sig:41016`
+1. `probe:117`
+2. `sig:41017`
 
 If values do not match, MakeCode is still using stale package content.
 
@@ -53,12 +53,12 @@ If values do not match, MakeCode is still using stale package content.
 ```python
 droneIMUV3.init()
 basic.show_string("T")
-serial.write_value("probe", droneIMUV3.releaseProbe116())
+serial.write_value("probe", droneIMUV3.releaseProbe117())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 basic.show_string("Y")
 ```
 
-For hardware verification, `droneIMUV3.hardwareWhoAmI()` should return `104` when AD0 is tied to GND.
+For hardware verification, `droneIMUV3.hardwareWhoAmI()` (or `droneIMUV3.whoAmI()`) should return `104` when AD0 is tied to GND.
 
 `droneIMUV3.readSensorPacketValid()` should return `true` when a 14-byte packet is received.
 
@@ -66,6 +66,6 @@ Use `droneIMUV3.refreshSensorSnapshot()` before reading roll/pitch/yaw if you wa
 
 `droneIMUV3.readRollRate()`, `droneIMUV3.readPitchRate()`, and `droneIMUV3.readYawRate()` provide gyro rates in deg/s.
 
-For native verification, `droneIMUV3.nativeConstant()` should return `123`.
+For native verification, `droneIMUV3.nativeConstant()` should return `123` on device and `-1` in simulator.
 
 If this works, your dependency pin is healthy and you can proceed with feature development.

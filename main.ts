@@ -1,12 +1,13 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 116"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 117"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-B"
-    const BUILD_SIGNATURE_CODE = 41016
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-C"
+    const BUILD_SIGNATURE_CODE = 41017
     const MPU_ADDR = 0x68
     const REG_PWR_MGMT_1 = 0x6B
+    const REG_GYRO_CONFIG = 0x1B
     const REG_ACCEL_XOUT_H = 0x3B
     let initialized = false
     let lastPacket = pins.createBuffer(14)
@@ -21,6 +22,13 @@ namespace droneIMUV3 {
     function readSensorPacketInternal(): Buffer {
         pins.i2cWriteNumber(MPU_ADDR, REG_ACCEL_XOUT_H, NumberFormat.UInt8LE, true)
         return pins.i2cReadBuffer(MPU_ADDR, 14, false)
+    }
+
+    function writeReg(reg: number, value: number): void {
+        const b = pins.createBuffer(2)
+        b[0] = reg
+        b[1] = value
+        pins.i2cWriteBuffer(MPU_ADDR, b, false)
     }
 
     function updateSnapshot(): boolean {
@@ -38,8 +46,9 @@ namespace droneIMUV3 {
     //% blockId=droneimuv3_init block="initialize IMU"
     //% weight=100
     export function init(): void {
-        pins.i2cWriteNumber(MPU_ADDR, REG_PWR_MGMT_1, NumberFormat.UInt8LE)
-        pins.i2cWriteNumber(MPU_ADDR, 0x01, NumberFormat.UInt8LE)
+        writeReg(REG_PWR_MGMT_1, 0x01)
+        writeReg(REG_GYRO_CONFIG, 0x08)
+        basic.pause(10)
         initialized = true
         hasLastPacket = false
     }
@@ -68,6 +77,12 @@ namespace droneIMUV3 {
     export function hardwareWhoAmI(): number {
         pins.i2cWriteNumber(MPU_ADDR, 0x75, NumberFormat.UInt8LE, true)
         return pins.i2cReadNumber(MPU_ADDR, NumberFormat.UInt8LE, false)
+    }
+
+    //% blockId=droneimuv3_whoami block="WHO_AM_I"
+    //% weight=89
+    export function whoAmI(): number {
+        return hardwareWhoAmI()
     }
 
     //% blockId=droneimuv3_readsensorpacket block="read sensor packet valid"
@@ -106,7 +121,12 @@ namespace droneIMUV3 {
     //% blockId=droneimuv3_nativeconst block="native constant"
     //% weight=88
     export function nativeConstant(): number {
-        return nativeConst123()
+        try {
+            return nativeConst123()
+        } catch (e) {
+            // Simulator has no native shim; return sentinel instead of crashing runtime.
+            return -1
+        }
     }
 
     //% blockId=droneimuv3_ping block="ping"
@@ -133,9 +153,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe116 block="release probe 116"
+    //% blockId=droneimuv3_releaseprobe117 block="release probe 117"
     //% weight=83
-    export function releaseProbe116(): number {
-        return 116
+    export function releaseProbe117(): number {
+        return 117
     }
 }
