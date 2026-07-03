@@ -1,14 +1,17 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 119"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 120"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-E"
-    const BUILD_SIGNATURE_CODE = 41019
-    const MPU_ADDR = 0x68
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-F"
+    const BUILD_SIGNATURE_CODE = 41020
+    const MPU_ADDR_68 = 0x68
+    const MPU_ADDR_69 = 0x69
     const REG_PWR_MGMT_1 = 0x6B
     const REG_GYRO_CONFIG = 0x1B
     const REG_ACCEL_XOUT_H = 0x3B
+    const REG_WHO_AM_I = 0x75
+    let activeAddr = MPU_ADDR_68
     let initialized = false
     let lastPacket = pins.createBuffer(14)
     let hasLastPacket = false
@@ -22,16 +25,49 @@ namespace droneIMUV3 {
         return v
     }
 
-    function readSensorPacketInternal(): Buffer {
-        pins.i2cWriteNumber(MPU_ADDR, REG_ACCEL_XOUT_H, NumberFormat.UInt8LE, true)
-        return pins.i2cReadBuffer(MPU_ADDR, 14, false)
+    function readReg(addr: number, reg: number): number {
+        pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8LE, true)
+        return pins.i2cReadNumber(addr, NumberFormat.UInt8LE, false)
     }
 
-    function writeReg(reg: number, value: number): void {
+    function readSensorPacketInternal(): Buffer {
+        pins.i2cWriteNumber(activeAddr, REG_ACCEL_XOUT_H, NumberFormat.UInt8LE, true)
+        return pins.i2cReadBuffer(activeAddr, 14, false)
+    }
+
+    function writeReg(addr: number, reg: number, value: number): void {
         const b = pins.createBuffer(2)
         b[0] = reg
         b[1] = value
-        pins.i2cWriteBuffer(MPU_ADDR, b, false)
+        pins.i2cWriteBuffer(addr, b, false)
+    }
+
+    function whoAmIWithRetry(addr: number): number {
+        let id = 0
+        for (let i = 0; i < 5; i++) {
+            id = readReg(addr, REG_WHO_AM_I)
+            if (id != 0 && id != 255) return id
+            basic.pause(20)
+        }
+        return id
+    }
+
+    function selectActiveAddress(): number {
+        const id68 = whoAmIWithRetry(MPU_ADDR_68)
+        if (id68 != 0 && id68 != 255) {
+            activeAddr = MPU_ADDR_68
+            return activeAddr
+        }
+
+        const id69 = whoAmIWithRetry(MPU_ADDR_69)
+        if (id69 != 0 && id69 != 255) {
+            activeAddr = MPU_ADDR_69
+            return activeAddr
+        }
+
+        // Keep gyro path alive for clone behavior where WHO_AM_I is unreliable.
+        activeAddr = MPU_ADDR_68
+        return activeAddr
     }
 
     function updateSnapshot(): boolean {
@@ -49,8 +85,9 @@ namespace droneIMUV3 {
     //% blockId=droneimuv3_init block="initialize IMU"
     //% weight=100
     export function init(): void {
-        writeReg(REG_PWR_MGMT_1, 0x01)
-        writeReg(REG_GYRO_CONFIG, 0x08)
+        selectActiveAddress()
+        writeReg(activeAddr, REG_PWR_MGMT_1, 0x01)
+        writeReg(activeAddr, REG_GYRO_CONFIG, 0x08)
         basic.pause(10)
         initialized = true
         hasLastPacket = false
@@ -84,8 +121,25 @@ namespace droneIMUV3 {
     //% blockId=droneimuv3_hwwhoami block="hardware WHO_AM_I"
     //% weight=89
     export function hardwareWhoAmI(): number {
-        pins.i2cWriteNumber(MPU_ADDR, 0x75, NumberFormat.UInt8LE, true)
-        return pins.i2cReadNumber(MPU_ADDR, NumberFormat.UInt8LE, false)
+        return whoAmIWithRetry(activeAddr)
+    }
+
+    //% blockId=droneimuv3_whoami68 block="WHO_AM_I at 0x68"
+    //% weight=89
+    export function whoAmIAt68(): number {
+        return whoAmIWithRetry(MPU_ADDR_68)
+    }
+
+    //% blockId=droneimuv3_whoami69 block="WHO_AM_I at 0x69"
+    //% weight=89
+    export function whoAmIAt69(): number {
+        return whoAmIWithRetry(MPU_ADDR_69)
+    }
+
+    //% blockId=droneimuv3_activeaddr block="active I2C address"
+    //% weight=89
+    export function activeI2cAddress(): number {
+        return activeAddr
     }
 
     //% blockId=droneimuv3_whoami block="WHO_AM_I"
@@ -190,6 +244,18 @@ namespace droneIMUV3 {
         return whoAmI()
     }
 
+    export function who_am_i_at_68(): number {
+        return whoAmIAt68()
+    }
+
+    export function who_am_i_at_69(): number {
+        return whoAmIAt69()
+    }
+
+    export function active_i2c_address(): number {
+        return activeI2cAddress()
+    }
+
     export function refresh_sensor_snapshot(): boolean {
         return refreshSensorSnapshot()
     }
@@ -228,9 +294,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe119 block="release probe 119"
+    //% blockId=droneimuv3_releaseprobe120 block="release probe 120"
     //% weight=83
-    export function releaseProbe119(): number {
-        return 119
+    export function releaseProbe120(): number {
+        return 120
     }
 }

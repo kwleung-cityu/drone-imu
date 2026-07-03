@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.19",
-    "description": "Drone IMU V3 stable runtime alias API without simulator native crash",
+    "version": "1.0.20",
+    "description": "Drone IMU V3 WHO_AM_I retry and dual-address diagnostics",
     "license": "MIT",
     "dependencies": {
         "core": "*"

@@ -2,8 +2,8 @@
 
 This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Current build signature: `V3-MIN-SIG-20260703-E`
-Current build signature code: `41019`
+Current build signature: `V3-MIN-SIG-20260703-F`
+Current build signature code: `41020`
 
 ## Files
 
@@ -24,7 +24,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.19"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.20"
 }
 ```
 
@@ -37,14 +37,14 @@ This method is confirmed to fetch the correct tagged version without creating a 
 Use this Python probe after updating dependency tag:
 
 ```python
-serial.write_value("probe", droneIMUV3.releaseProbe119())
+serial.write_value("probe", droneIMUV3.releaseProbe120())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 ```
 
-Expected for `v1.0.19`:
+Expected for `v1.0.20`:
 
-1. `probe:119`
-2. `sig:41019`
+1. `probe:120`
+2. `sig:41020`
 
 If values do not match, MakeCode is still using stale package content.
 
@@ -53,12 +53,14 @@ If values do not match, MakeCode is still using stale package content.
 ```python
 droneIMUV3.init()
 basic.show_string("T")
-serial.write_value("probe", droneIMUV3.releaseProbe119())
+serial.write_value("probe", droneIMUV3.releaseProbe120())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 basic.show_string("Y")
 ```
 
 For hardware verification, `droneIMUV3.hardwareWhoAmI()` (or `droneIMUV3.whoAmI()`) should return `104` when AD0 is tied to GND.
+
+For diagnostics, also read `droneIMUV3.whoAmIAt68()`, `droneIMUV3.whoAmIAt69()`, and `droneIMUV3.activeI2cAddress()`.
 
 `droneIMUV3.readSensorPacketValid()` should return `true` when a 14-byte packet is received.
 
@@ -68,7 +70,7 @@ If stationary bias is present (for example roll around `-12 deg/s` at rest), cal
 
 `droneIMUV3.readRollRate()`, `droneIMUV3.readPitchRate()`, and `droneIMUV3.readYawRate()` provide gyro rates in deg/s.
 
-`v1.0.18` also adds Python-friendly underscore aliases (for example `native_constant()`, `who_am_i()`, `hardware_who_am_i()`, `read_roll_rate()`).
+`v1.0.20` also includes Python-friendly underscore aliases for WHO_AM_I/address diagnostics (for example `who_am_i_at_68()`, `who_am_i_at_69()`, `active_i2c_address()`).
 
 For runtime verification, `droneIMUV3.nativeConstant()` should return `123` in both simulator and device (stability mode).
 
