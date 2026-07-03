@@ -1,15 +1,17 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 125"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 126"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-K"
-    const BUILD_SIGNATURE_CODE = 41025
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-L"
+    const BUILD_SIGNATURE_CODE = 41026
     const MPU_ADDR_68 = 0x68
     const MPU_ADDR_69 = 0x69
     const REG_PWR_MGMT_1 = 0x6B
     const REG_GYRO_CONFIG = 0x1B
     const REG_ACCEL_XOUT_H = 0x3B
+    const REG_ACCEL_YOUT_H = 0x3D
+    const REG_ACCEL_ZOUT_H = 0x3F
     const REG_WHO_AM_I = 0x75
     const REG_GYRO_XOUT_H = 0x43
     const REG_GYRO_YOUT_H = 0x45
@@ -249,6 +251,42 @@ namespace droneIMUV3 {
         return readWord(activeAddr, REG_GYRO_ZOUT_H)
     }
 
+    //% blockId=droneimuv3_raw_ax block="read raw accel X"
+    //% weight=85
+    export function readRawAccelX(): number {
+        return readWord(activeAddr, REG_ACCEL_XOUT_H)
+    }
+
+    //% blockId=droneimuv3_raw_ay block="read raw accel Y"
+    //% weight=85
+    export function readRawAccelY(): number {
+        return readWord(activeAddr, REG_ACCEL_YOUT_H)
+    }
+
+    //% blockId=droneimuv3_raw_az block="read raw accel Z"
+    //% weight=85
+    export function readRawAccelZ(): number {
+        return readWord(activeAddr, REG_ACCEL_ZOUT_H)
+    }
+
+    //% blockId=droneimuv3_accel_xg block="read accel X g"
+    //% weight=84
+    export function readAccelXg(): number {
+        return readRawAccelX() / 16384
+    }
+
+    //% blockId=droneimuv3_accel_yg block="read accel Y g"
+    //% weight=84
+    export function readAccelYg(): number {
+        return readRawAccelY() / 16384
+    }
+
+    //% blockId=droneimuv3_accel_zg block="read accel Z g"
+    //% weight=84
+    export function readAccelZg(): number {
+        return readRawAccelZ() / 16384
+    }
+
     //% blockId=droneimuv3_calib_gyro_bias block="calibrate gyro bias samples %samples"
     //% samples.min=16 samples.max=256 samples.defl=64
     //% weight=84
@@ -372,6 +410,30 @@ namespace droneIMUV3 {
         return readRawGyroZ()
     }
 
+    export function read_raw_accel_x(): number {
+        return readRawAccelX()
+    }
+
+    export function read_raw_accel_y(): number {
+        return readRawAccelY()
+    }
+
+    export function read_raw_accel_z(): number {
+        return readRawAccelZ()
+    }
+
+    export function read_accel_x_g(): number {
+        return readAccelXg()
+    }
+
+    export function read_accel_y_g(): number {
+        return readAccelYg()
+    }
+
+    export function read_accel_z_g(): number {
+        return readAccelZg()
+    }
+
     export function calibrate_gyro_bias(samples: number): boolean {
         return calibrateGyroBias(samples)
     }
@@ -394,9 +456,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe125 block="release probe 125"
+    //% blockId=droneimuv3_releaseprobe126 block="release probe 126"
     //% weight=83
-    export function releaseProbe125(): number {
-        return 125
+    export function releaseProbe126(): number {
+        return 126
     }
 }

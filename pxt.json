@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.25",
-    "description": "Drone IMU V3 direct gyro register read path",
+    "version": "1.0.26",
+    "description": "Drone IMU V3 accelerometer raw and g readings",
     "license": "MIT",
     "dependencies": {
         "core": "*"
