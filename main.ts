@@ -1,10 +1,10 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 117"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 118"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-C"
-    const BUILD_SIGNATURE_CODE = 41017
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-D"
+    const BUILD_SIGNATURE_CODE = 41018
     const MPU_ADDR = 0x68
     const REG_PWR_MGMT_1 = 0x6B
     const REG_GYRO_CONFIG = 0x1B
@@ -12,6 +12,9 @@ namespace droneIMUV3 {
     let initialized = false
     let lastPacket = pins.createBuffer(14)
     let hasLastPacket = false
+    let gyroBiasX = 0
+    let gyroBiasY = 0
+    let gyroBiasZ = 0
 
     function i16be(buf: Buffer, idx: number): number {
         let v = (buf[idx] << 8) | buf[idx + 1]
@@ -51,6 +54,9 @@ namespace droneIMUV3 {
         basic.pause(10)
         initialized = true
         hasLastPacket = false
+        gyroBiasX = 0
+        gyroBiasY = 0
+        gyroBiasZ = 0
     }
 
     //% blockId=droneimuv3_initsimple block="initialize IMU (simple)"
@@ -58,6 +64,9 @@ namespace droneIMUV3 {
     export function initSimple(): void {
         initialized = true
         hasLastPacket = false
+        gyroBiasX = 0
+        gyroBiasY = 0
+        gyroBiasZ = 0
     }
 
     //% blockId=droneimuv3_buildsig block="build signature"
@@ -101,21 +110,58 @@ namespace droneIMUV3 {
     //% weight=87
     export function readRollRate(): number {
         if (!hasLastPacket && !updateSnapshot()) return 0
-        return i16be(lastPacket, 8) / 65.5
+        return (i16be(lastPacket, 8) - gyroBiasX) / 65.5
     }
 
     //% blockId=droneimuv3_read_pitch block="read pitch rate deg/s"
     //% weight=86
     export function readPitchRate(): number {
         if (!hasLastPacket && !updateSnapshot()) return 0
-        return i16be(lastPacket, 10) / 65.5
+        return (i16be(lastPacket, 10) - gyroBiasY) / 65.5
     }
 
     //% blockId=droneimuv3_read_yaw block="read yaw rate deg/s"
     //% weight=85
     export function readYawRate(): number {
         if (!hasLastPacket && !updateSnapshot()) return 0
-        return i16be(lastPacket, 12) / 65.5
+        return (i16be(lastPacket, 12) - gyroBiasZ) / 65.5
+    }
+
+    //% blockId=droneimuv3_calib_gyro_bias block="calibrate gyro bias samples %samples"
+    //% samples.min=16 samples.max=256 samples.defl=64
+    //% weight=84
+    export function calibrateGyroBias(samples: number): boolean {
+        if (samples < 1) samples = 64
+
+        let sx = 0
+        let sy = 0
+        let sz = 0
+        let n = 0
+
+        for (let i = 0; i < samples; i++) {
+            if (updateSnapshot()) {
+                sx += i16be(lastPacket, 8)
+                sy += i16be(lastPacket, 10)
+                sz += i16be(lastPacket, 12)
+                n += 1
+            }
+            basic.pause(2)
+        }
+
+        if (n < 1) return false
+
+        gyroBiasX = Math.round(sx / n)
+        gyroBiasY = Math.round(sy / n)
+        gyroBiasZ = Math.round(sz / n)
+        return true
+    }
+
+    //% blockId=droneimuv3_reset_gyro_bias block="reset gyro bias"
+    //% weight=84
+    export function resetGyroBias(): void {
+        gyroBiasX = 0
+        gyroBiasY = 0
+        gyroBiasZ = 0
     }
 
     //% blockId=droneimuv3_nativeconst block="native constant"
@@ -133,6 +179,39 @@ namespace droneIMUV3 {
     //% weight=87
     export function ping(): boolean {
         return initialized
+    }
+
+    // Python-friendly aliases to avoid naming ambiguity across targets.
+    export function native_constant(): number {
+        return nativeConstant()
+    }
+
+    export function hardware_who_am_i(): number {
+        return hardwareWhoAmI()
+    }
+
+    export function who_am_i(): number {
+        return whoAmI()
+    }
+
+    export function refresh_sensor_snapshot(): boolean {
+        return refreshSensorSnapshot()
+    }
+
+    export function read_roll_rate(): number {
+        return readRollRate()
+    }
+
+    export function read_pitch_rate(): number {
+        return readPitchRate()
+    }
+
+    export function read_yaw_rate(): number {
+        return readYawRate()
+    }
+
+    export function calibrate_gyro_bias(samples: number): boolean {
+        return calibrateGyroBias(samples)
     }
 
     //% blockId=droneimuv3_releaseprobe104 block="release probe 104"
@@ -153,9 +232,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe117 block="release probe 117"
+    //% blockId=droneimuv3_releaseprobe118 block="release probe 118"
     //% weight=83
-    export function releaseProbe117(): number {
-        return 117
+    export function releaseProbe118(): number {
+        return 118
     }
 }

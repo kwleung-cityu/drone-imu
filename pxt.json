@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.17",
-    "description": "Drone IMU V3 proper init writes and simulator-safe native fallback",
+    "version": "1.0.18",
+    "description": "Drone IMU V3 gyro bias calibration and Python alias wrappers",
     "license": "MIT",
     "dependencies": {
         "core": "*"
