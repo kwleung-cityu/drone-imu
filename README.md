@@ -2,8 +2,8 @@
 
 This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Current build signature: `V3-MIN-SIG-20260703-F`
-Current build signature code: `41020`
+Current build signature: `V3-MIN-SIG-20260703-G`
+Current build signature code: `41021`
 
 ## Files
 
@@ -24,7 +24,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.20"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.21"
 }
 ```
 
@@ -37,14 +37,14 @@ This method is confirmed to fetch the correct tagged version without creating a 
 Use this Python probe after updating dependency tag:
 
 ```python
-serial.write_value("probe", droneIMUV3.releaseProbe120())
+serial.write_value("probe", droneIMUV3.releaseProbe121())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 ```
 
-Expected for `v1.0.20`:
+Expected for `v1.0.21`:
 
-1. `probe:120`
-2. `sig:41020`
+1. `probe:121`
+2. `sig:41021`
 
 If values do not match, MakeCode is still using stale package content.
 
@@ -53,7 +53,7 @@ If values do not match, MakeCode is still using stale package content.
 ```python
 droneIMUV3.init()
 basic.show_string("T")
-serial.write_value("probe", droneIMUV3.releaseProbe120())
+serial.write_value("probe", droneIMUV3.releaseProbe121())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 basic.show_string("Y")
 ```
@@ -69,6 +69,8 @@ Use `droneIMUV3.refreshSensorSnapshot()` before reading roll/pitch/yaw if you wa
 If stationary bias is present (for example roll around `-12 deg/s` at rest), call `droneIMUV3.calibrateGyroBias(64)` while the sensor is fixed on a table.
 
 `droneIMUV3.readRollRate()`, `droneIMUV3.readPitchRate()`, and `droneIMUV3.readYawRate()` provide gyro rates in deg/s.
+
+For low-level diagnostics, use `droneIMUV3.readRawGyroX()`, `droneIMUV3.readRawGyroY()`, and `droneIMUV3.readRawGyroZ()`.
 
 `v1.0.20` also includes Python-friendly underscore aliases for WHO_AM_I/address diagnostics (for example `who_am_i_at_68()`, `who_am_i_at_69()`, `active_i2c_address()`).
 

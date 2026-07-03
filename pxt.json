@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.20",
-    "description": "Drone IMU V3 WHO_AM_I retry and dual-address diagnostics",
+    "version": "1.0.21",
+    "description": "Drone IMU V3 packet sanity checks and raw gyro diagnostics",
     "license": "MIT",
     "dependencies": {
         "core": "*"
