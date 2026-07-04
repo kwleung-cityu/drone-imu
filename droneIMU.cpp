@@ -7,6 +7,31 @@
 #endif
 
 namespace droneIMUV3 {
+    static int normalizePinId(int pinId) {
+        switch (pinId) {
+        case 0: return MICROBIT_ID_IO_P0;
+        case 1: return MICROBIT_ID_IO_P1;
+        case 2: return MICROBIT_ID_IO_P2;
+        case 3: return MICROBIT_ID_IO_P3;
+        case 4: return MICROBIT_ID_IO_P4;
+        case 5: return MICROBIT_ID_IO_P5;
+        case 6: return MICROBIT_ID_IO_P6;
+        case 7: return MICROBIT_ID_IO_P7;
+        case 8: return MICROBIT_ID_IO_P8;
+        case 9: return MICROBIT_ID_IO_P9;
+        case 10: return MICROBIT_ID_IO_P10;
+        case 11: return MICROBIT_ID_IO_P11;
+        case 12: return MICROBIT_ID_IO_P12;
+        case 13: return MICROBIT_ID_IO_P13;
+        case 14: return MICROBIT_ID_IO_P14;
+        case 15: return MICROBIT_ID_IO_P15;
+        case 16: return MICROBIT_ID_IO_P16;
+        case 19: return MICROBIT_ID_IO_P19;
+        case 20: return MICROBIT_ID_IO_P20;
+        default: return pinId; // already an internal ID (for enum inputs)
+        }
+    }
+
     static int readRegInternal(int addr, int reg) {
         uint8_t r = (uint8_t)reg;
         uint8_t v = 0;
@@ -63,7 +88,7 @@ namespace droneIMUV3 {
         if (cycles < 1)
             cycles = 200;
 
-        MicroBitPin *pin = pxt::getPin(pinId);
+        MicroBitPin *pin = pxt::getPin(normalizePinId(pinId));
         if (!pin)
             return -1;
 

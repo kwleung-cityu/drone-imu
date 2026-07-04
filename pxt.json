@@ -1,7 +1,7 @@
 {
     "name": "drone-imu-v3-min",
-    "version": "1.0.27",
-    "description": "Drone IMU V3 C++ hardware I2C migration and 100Hz toggle test",
+    "version": "1.0.28",
+    "description": "Drone IMU V3 fix pin-number mapping for 100Hz toggle test",
     "license": "MIT",
     "dependencies": {
         "core": "*"
