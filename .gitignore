@@ -10,3 +10,7 @@ _site
 *.tgz
 .header.json
 .simstate.json
+build-full.log
+build-full-decoded.txt
+package.json
+package-lock.json
