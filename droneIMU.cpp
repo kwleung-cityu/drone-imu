@@ -84,6 +84,29 @@ namespace droneIMUV3 {
     }
 
     //%
+    int imuRun100HzBurstReadToggleTest(int addr, int pinId, int cycles) {
+        if (cycles < 1)
+            cycles = 200;
+
+        MicroBitPin *pin = pxt::getPin(normalizePinId(pinId));
+        if (!pin)
+            return -1;
+
+        uint8_t reg = 0x3B;
+        uint8_t data[14];
+
+        for (int i = 0; i < cycles; i++) {
+            pin->setDigitalValue(1);
+            uBit.i2c.write(addr << 1, (BUFFER_TYPE)&reg, 1, true);
+            uBit.i2c.read(addr << 1, (BUFFER_TYPE)&data[0], 14, false);
+            pin->setDigitalValue(0);
+            pxt::sleep_us(10000);
+        }
+
+        return cycles;
+    }
+
+    //%
     int imuRun100HzToggleTest(int addr, int pinId, int cycles, bool includeRead) {
         if (cycles < 1)
             cycles = 200;

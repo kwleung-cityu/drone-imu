@@ -2,8 +2,8 @@
 
 This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Current build signature: `V3-MIN-SIG-20260704-B`
-Current build signature code: `41028`
+Current build signature: `V3-MIN-SIG-20260704-C`
+Current build signature code: `41029`
 
 ## Files
 
@@ -24,7 +24,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.28"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.29"
 }
 ```
 
@@ -37,14 +37,14 @@ This method is confirmed to fetch the correct tagged version without creating a 
 Use this Python probe after updating dependency tag:
 
 ```python
-serial.write_value("probe", droneIMUV3.releaseProbe128())
+serial.write_value("probe", droneIMUV3.releaseProbe129())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 ```
 
-Expected for `v1.0.28`:
+Expected for `v1.0.29`:
 
-1. `probe:128`
-2. `sig:41028`
+1. `probe:129`
+2. `sig:41029`
 
 If values do not match, MakeCode is still using stale package content.
 
@@ -53,7 +53,7 @@ If values do not match, MakeCode is still using stale package content.
 ```python
 droneIMUV3.init()
 basic.show_string("T")
-serial.write_value("probe", droneIMUV3.releaseProbe128())
+serial.write_value("probe", droneIMUV3.releaseProbe129())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 basic.show_string("Y")
 ```
@@ -77,6 +77,8 @@ For low-level diagnostics, use `droneIMUV3.readRawGyroX()`, `droneIMUV3.readRawG
 `v1.0.27` migrates low-level hardware I2C operations into C++ shims (`droneIMU.cpp`) while keeping user-facing APIs in TypeScript.
 
 For DSO timing checks, use `run100HzToggleTest(pin, cycles, includeRead)` or Python alias `run_100hz_toggle_test(pin, cycles, includeRead)`.
+
+For a full MPU6050 14-byte read inside each 100 Hz cycle, use `run100HzBurstReadToggleTest(pin, cycles)` or Python alias `run_100hz_burst_read_toggle_test(pin, cycles)`.
 
 `v1.0.20` also includes Python-friendly underscore aliases for WHO_AM_I/address diagnostics (for example `who_am_i_at_68()`, `who_am_i_at_69()`, `active_i2c_address()`).
 

@@ -1,10 +1,10 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 128"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 129"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260704-B"
-    const BUILD_SIGNATURE_CODE = 41028
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260704-C"
+    const BUILD_SIGNATURE_CODE = 41029
     const MPU_ADDR_68 = 0x68
     const MPU_ADDR_69 = 0x69
     const REG_PWR_MGMT_1 = 0x6B
@@ -316,6 +316,14 @@ namespace droneIMUV3 {
         return imuRun100HzToggleTest(activeAddr, pin, cycles, includeRead)
     }
 
+    //% blockId=droneimuv3_run100hzburst block="run 100Hz burst-read toggle test pin %pin cycles %cycles"
+    //% pin.defl=13
+    //% cycles.defl=200 cycles.min=1
+    //% weight=81
+    export function run100HzBurstReadToggleTest(pin: number, cycles: number): number {
+        return imuRun100HzBurstReadToggleTest(activeAddr, pin, cycles)
+    }
+
     //% blockId=droneimuv3_reset_gyro_bias block="reset gyro bias"
     //% weight=84
     export function resetGyroBias(): void {
@@ -442,6 +450,10 @@ namespace droneIMUV3 {
         return run100HzToggleTest(pin, cycles, includeRead)
     }
 
+    export function run_100hz_burst_read_toggle_test(pin: number, cycles: number): number {
+        return run100HzBurstReadToggleTest(pin, cycles)
+    }
+
     //% blockId=droneimuv3_releaseprobe104 block="release probe 104"
     //% weight=87
     export function releaseProbe104(): number {
@@ -460,9 +472,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe128 block="release probe 128"
+    //% blockId=droneimuv3_releaseprobe129 block="release probe 129"
     //% weight=83
-    export function releaseProbe128(): number {
-        return 128
+    export function releaseProbe129(): number {
+        return 129
     }
 }

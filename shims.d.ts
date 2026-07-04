@@ -14,6 +14,9 @@ declare namespace droneIMUV3 {
 	//% shim=droneIMUV3::imuReadSensorPacket14
 	function imuReadSensorPacket14(addr: number): Buffer;
 
+	//% shim=droneIMUV3::imuRun100HzBurstReadToggleTest
+	function imuRun100HzBurstReadToggleTest(addr: number, pinId: number, cycles: number): number;
+
 	//% shim=droneIMUV3::imuRun100HzToggleTest
 	function imuRun100HzToggleTest(addr: number, pinId: number, cycles: number, includeRead: boolean): number;
 }
