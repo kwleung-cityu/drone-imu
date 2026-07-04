@@ -5,6 +5,33 @@ This repository is used for MakeCode extension rebuild and cache-safe release te
 Current build signature: `V3-MIN-SIG-20260704-C`
 Current build signature code: `41029`
 
+## Current Status
+
+Validated as of `v1.0.29`:
+
+1. MakeCode dependency pinning by tag is the reliable update path.
+2. WHO_AM_I at address `0x68` returns `104` on the verified hardware.
+3. Gyroscope raw values and deg/s conversion are working.
+4. Accelerometer raw values and `g` conversion are working.
+5. Low-level hardware I2C access has been migrated into C++ shims in `droneIMU.cpp`.
+6. A C++ DSO timing harness is available for 100 Hz loop validation.
+
+Most relevant timing observations from today's DSO checks:
+
+1. Simple C++ toggle loop with optional single gyro read measured about `97.4 Hz`.
+2. Full 14-byte burst-read timing test measured about `88 Hz` with:
+    - period about `11.3 ms`
+    - high pulse about `1.6 ms`
+    - low pulse about `9.7 ms`
+3. I2C transfer was observed during the high pulse in the burst-read test.
+4. I2C clock on the bus measured about `100 kHz`.
+
+Interpretation:
+
+1. The burst read itself is not prohibitively expensive.
+2. The current burst-read harness sleeps a fixed `10 ms` after each read, so total cycle time is `read time + 10 ms`.
+3. This strongly suggests a true scheduled 100 Hz C++ loop is feasible if the sleep is reduced to the remaining slot time instead of a fixed 10 ms.
+
 ## Files
 
 1. `pxt.json`
