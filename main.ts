@@ -1,10 +1,10 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
-//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 126"
+//% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 127"
 namespace droneIMUV3 {
-    const BUILD_SIGNATURE = "V3-MIN-SIG-20260703-L"
-    const BUILD_SIGNATURE_CODE = 41026
+    const BUILD_SIGNATURE = "V3-MIN-SIG-20260704-A"
+    const BUILD_SIGNATURE_CODE = 41027
     const MPU_ADDR_68 = 0x68
     const MPU_ADDR_69 = 0x69
     const REG_PWR_MGMT_1 = 0x6B
@@ -31,28 +31,19 @@ namespace droneIMUV3 {
     }
 
     function readReg(addr: number, reg: number): number {
-        pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8LE, true)
-        return pins.i2cReadNumber(addr, NumberFormat.UInt8LE, false)
+        return imuReadReg(addr, reg)
     }
 
     function readWord(addr: number, regHigh: number): number {
-        const hi = readReg(addr, regHigh)
-        const lo = readReg(addr, regHigh + 1)
-        let v = (hi << 8) | lo
-        if (v & 0x8000) v = v - 65536
-        return v
+        return imuReadWord(addr, regHigh)
     }
 
     function readSensorPacketAt(addr: number): Buffer {
-        pins.i2cWriteNumber(addr, REG_ACCEL_XOUT_H, NumberFormat.UInt8LE, true)
-        return pins.i2cReadBuffer(addr, 14, false)
+        return imuReadSensorPacket14(addr)
     }
 
     function writeReg(addr: number, reg: number, value: number): void {
-        const b = pins.createBuffer(2)
-        b[0] = reg
-        b[1] = value
-        pins.i2cWriteBuffer(addr, b, false)
+        imuWriteReg(addr, reg, value)
     }
 
     function configureAt(addr: number): void {
@@ -316,6 +307,15 @@ namespace droneIMUV3 {
         return true
     }
 
+    //% blockId=droneimuv3_run100hztoggle block="run 100Hz toggle test pin %pin cycles %cycles with gyro read %includeRead"
+    //% pin.defl=13
+    //% cycles.defl=200 cycles.min=1
+    //% includeRead.defl=true
+    //% weight=82
+    export function run100HzToggleTest(pin: number, cycles: number, includeRead: boolean): number {
+        return imuRun100HzToggleTest(activeAddr, pin, cycles, includeRead)
+    }
+
     //% blockId=droneimuv3_reset_gyro_bias block="reset gyro bias"
     //% weight=84
     export function resetGyroBias(): void {
@@ -438,6 +438,10 @@ namespace droneIMUV3 {
         return calibrateGyroBias(samples)
     }
 
+    export function run_100hz_toggle_test(pin: number, cycles: number, includeRead: boolean): number {
+        return run100HzToggleTest(pin, cycles, includeRead)
+    }
+
     //% blockId=droneimuv3_releaseprobe104 block="release probe 104"
     //% weight=87
     export function releaseProbe104(): number {
@@ -456,9 +460,9 @@ namespace droneIMUV3 {
         return 106
     }
 
-    //% blockId=droneimuv3_releaseprobe126 block="release probe 126"
+    //% blockId=droneimuv3_releaseprobe127 block="release probe 127"
     //% weight=83
-    export function releaseProbe126(): number {
-        return 126
+    export function releaseProbe127(): number {
+        return 127
     }
 }

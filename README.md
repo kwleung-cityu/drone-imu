@@ -2,8 +2,8 @@
 
 This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Current build signature: `V3-MIN-SIG-20260703-L`
-Current build signature code: `41026`
+Current build signature: `V3-MIN-SIG-20260704-A`
+Current build signature code: `41027`
 
 ## Files
 
@@ -24,7 +24,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.26"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.27"
 }
 ```
 
@@ -37,14 +37,14 @@ This method is confirmed to fetch the correct tagged version without creating a 
 Use this Python probe after updating dependency tag:
 
 ```python
-serial.write_value("probe", droneIMUV3.releaseProbe126())
+serial.write_value("probe", droneIMUV3.releaseProbe127())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 ```
 
-Expected for `v1.0.26`:
+Expected for `v1.0.27`:
 
-1. `probe:126`
-2. `sig:41026`
+1. `probe:127`
+2. `sig:41027`
 
 If values do not match, MakeCode is still using stale package content.
 
@@ -53,7 +53,7 @@ If values do not match, MakeCode is still using stale package content.
 ```python
 droneIMUV3.init()
 basic.show_string("T")
-serial.write_value("probe", droneIMUV3.releaseProbe126())
+serial.write_value("probe", droneIMUV3.releaseProbe127())
 serial.write_value("sig", droneIMUV3.buildSignatureCode())
 basic.show_string("Y")
 ```
@@ -73,6 +73,10 @@ If stationary bias is present (for example roll around `-12 deg/s` at rest), cal
 For low-level diagnostics, use `droneIMUV3.readRawGyroX()`, `droneIMUV3.readRawGyroY()`, and `droneIMUV3.readRawGyroZ()`.
 
 `v1.0.26` adds accelerometer readings: `readRawAccelX/Y/Z()` and `readAccelXg/Yg/Zg()`.
+
+`v1.0.27` migrates low-level hardware I2C operations into C++ shims (`droneIMU.cpp`) while keeping user-facing APIs in TypeScript.
+
+For DSO timing checks, use `run100HzToggleTest(pin, cycles, includeRead)` or Python alias `run_100hz_toggle_test(pin, cycles, includeRead)`.
 
 `v1.0.20` also includes Python-friendly underscore aliases for WHO_AM_I/address diagnostics (for example `who_am_i_at_68()`, `who_am_i_at_69()`, `active_i2c_address()`).
 
