@@ -9,6 +9,7 @@
     "files": [
         "shims.d.ts",
         "droneIMU.cpp",
+        "Kalman.cpp",
         "main.ts"
     ],
     "supportedTargets": [
