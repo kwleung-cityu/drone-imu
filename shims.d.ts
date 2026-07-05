@@ -20,3 +20,33 @@ declare namespace droneIMUV3 {
 	//% shim=droneIMUV3::imuRun100HzToggleTest
 	function imuRun100HzToggleTest(addr: number, pinId: number, cycles: number, includeRead: boolean): number;
 }
+
+declare namespace KalmanFilter {
+    //% shim=KalmanFilter::getAngle
+    function getAngle(newAngle: number, newRate: number, dt: number): number;
+
+    //% shim=KalmanFilter::setAngle
+    function setAngle(angle: number): void;
+
+    //% shim=KalmanFilter::getRate
+    function getRate(): number;
+
+    //% shim=KalmanFilter::setQangle
+    function setQangle(Q_angle: number): void;
+    
+    //% shim=KalmanFilter::setQbias
+    function setQbias(Q_bias: number): void;
+
+    //% shim=KalmanFilter::setRmeasure
+    function setRmeasure(R_measure: number): void;
+    
+    //% shim=KalmanFilter::getQangle
+    function getQangle(): number;
+
+    //% shim=KalmanFilter::getQbias
+    function getQbias(): number;
+    
+    //% shim=KalmanFilter::getRmeasure
+    function getRmeasure(): number;
+}
+

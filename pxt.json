@@ -2,9 +2,10 @@
     "name": "drone-imu-v3-min",
     "version": "1.0.29",
     "description": "Drone IMU V3 C++ burst-read timing test for DSO validation",
-    "license": "MIT",
+    "license": "GPL-3.0",
     "dependencies": {
-        "core": "*"
+        "core": "*",
+        "microphone": "*"
     },
     "files": [
         "shims.d.ts",
