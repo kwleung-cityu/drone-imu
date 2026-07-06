@@ -50,3 +50,17 @@ declare namespace KalmanFilter {
     function getRmeasure(): number;
 }
 
+declare namespace PidController {
+    //% shim=PidController::update
+    function update(setpoint: number, measured_value: number, dt: number): number;
+    
+    //% shim=PidController::setTunings
+    function setTunings(Kp: number, Ki: number, Kd: number): void;
+
+    //% shim=PidController::setOutputLimits
+    function setOutputLimits(min: number, max: number): void;
+    
+    //% shim=PidController::reset
+    function reset(): void;
+}
+
