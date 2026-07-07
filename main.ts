@@ -477,12 +477,11 @@ namespace droneIMUV3 {
     export function releaseProbe129(): number {
         return 129
     }
-}
 
-namespace KalmanFilter {
     export function getAngle(accelAngle: number, gyroRate: number, dt: number): number {
-        // Placeholder implementation for Kalman filter angle estimation
+        // Placeholder implementation for angle estimation
         // In a real implementation, you would maintain state and update it based on the inputs
-        return accelAngle + gyroRate * dt; // Simplified example
+        return KalmanFilter.getAngle(accelAngle, gyroRate, dt)
     }
 }
+
