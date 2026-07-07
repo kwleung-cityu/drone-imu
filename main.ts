@@ -478,6 +478,7 @@ namespace droneIMUV3 {
         return 129
     }
 
+    //% blockId=droneimu_getAngle block="get angle accel %accelAngle gyro %gyroRate dt %dt"
     export function getAngle(accelAngle: number, gyroRate: number, dt: number): number {
         // Placeholder implementation for angle estimation
         // In a real implementation, you would maintain state and update it based on the inputs
