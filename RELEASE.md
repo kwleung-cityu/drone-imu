@@ -18,7 +18,7 @@ What it does:
 4. Runs `pxt build`.
 5. Commits `pxt.json` with message `Release v1.0.32`.
 6. Creates annotated tag `v1.0.32`.
-7. Pushes `main` and `v1.0.32` to `origin`.
+7. Pushes the current branch and `v1.0.32` to `origin`.
 
 ## Optional flags
 
@@ -61,5 +61,7 @@ git push origin v1.0.32
 
 - Use a new tag for every release users should consume.
 - Do not reuse or move an existing tag.
+- The script now writes `pxt.json` as UTF-8 without BOM for MakeCode compatibility.
+- The script stops immediately if `pxt build`, `git commit`, or push commands fail.
 - After publishing, test in MakeCode with:
   - `github:kwleung-cityu/drone-imu#v1.0.32`
