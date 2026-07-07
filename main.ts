@@ -23,6 +23,7 @@ namespace droneIMUV3 {
     let gyroBiasX = 0
     let gyroBiasY = 0
     let gyroBiasZ = 0
+    let fusedAngle = 0
 
     function i16be(buf: Buffer, idx: number): number {
         let v = (buf[idx] << 8) | buf[idx + 1]
@@ -481,10 +482,15 @@ namespace droneIMUV3 {
     //% blockId=droneimuv3_get_angle block="get angle accel %accelAngle gyro %gyroRate dt %dt"
     //% weight=82
     export function getAngle(accelAngle: number, gyroRate: number, dt: number): number {
-        // Placeholder implementation for angle estimation
-        // In a real implementation, you would maintain state and update it based on the inputs
-        // return KalmanFilter.getAngle(accelAngle, gyroRate, dt)
-        return 1234
+        if (dt <= 0) {
+            fusedAngle = accelAngle
+            return fusedAngle
+        }
+
+        const predicted = fusedAngle + (gyroRate * dt)
+        const alpha = 0.98
+        fusedAngle = (alpha * predicted) + ((1 - alpha) * accelAngle)
+        return fusedAngle
     }
 }
 
