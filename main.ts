@@ -488,7 +488,7 @@ namespace droneIMUV3 {
         }
 
         const predicted = fusedAngle + (gyroRate * dt)
-        const alpha = 0.98
+        const alpha = 0.981
         fusedAngle = (alpha * predicted) + ((1 - alpha) * accelAngle)
         return fusedAngle
     }
