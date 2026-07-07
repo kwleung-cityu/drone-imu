@@ -494,3 +494,413 @@ namespace droneIMUV3 {
     }
 }
 
+namespace drone {
+    // ===== INITIALIZATION & SAFETY =====
+    /**
+     * Initialize drone hardware (IMU, motors, radio)
+     */
+    //% blockId=drone_init
+    //% block="initialize drone"
+    //% blockGap=8
+    //% weight=100
+    export function init(): void {
+    }
+
+    /**
+     * Arm (true) or disarm (false) motors
+     * Disarmed = safe for handling
+     * Armed = motors can spin
+     */
+    //% blockId=drone_arm
+    //% block="%arm motors"
+    //% arm.shadow="toggleOnOff"
+    //% arm.defl=false
+    //% blockGap=8
+    //% weight=99
+    export function arm(arm: boolean): void {
+    }
+
+    // ===== DIRECT MOTOR CONTROL (Open-Loop) =====
+    
+    /**
+     * Set all four motor speeds (0-100) independently
+     * Used for calibrating motor responses
+     */
+    //% blockId=drone_set_motors
+    //% block="set motors | front-left %fl | front-right %fr | back-left %bl | back-right %br"
+    //% fl.min=0 fl.max=100
+    //% fr.min=0 fr.max=100
+    //% bl.min=0 bl.max=100
+    //% br.min=0 br.max=100
+    //% blockGap=8
+    //% weight=70
+    export function setMotors(fl: number, fr: number, bl: number, br: number): void {
+        // Placeholder - direct motor control
+    }
+
+    // ===== MANUAL CONTROL (Open-Loop for Testing) =====
+    
+    /**
+     * Set throttle (collective thrust 0-100)
+     * Controls altitude
+     */
+    //% blockId=drone_set_throttle
+    //% block="set throttle %value"
+    //% value.min=0 value.max=100
+    //% blockGap=8
+    //% weight=95
+    export function setThrottle(value: number): void {
+        // Placeholder - maps to motor mix
+    }
+
+    /**
+     * Set pitch angle (-45 to 45 degrees)
+     * Forward/backward tilt
+     */
+    //% blockId=drone_set_pitch
+    //% block="set pitch %value °"
+    //% value.min=-45 value.max=45
+    //% blockGap=8
+    //% weight=94
+    export function setPitch(value: number): void {
+        // Placeholder - maps to motor mix
+    }
+
+    /**
+     * Set roll angle (-45 to 45 degrees)
+     * Left/right tilt
+     */
+    //% blockId=drone_set_roll
+    //% block="set roll %value °"
+    //% value.min=-45 value.max=45
+    //% blockGap=8
+    //% weight=93
+    export function setRoll(value: number): void {
+        // Placeholder - maps to motor mix
+    }
+
+    /**
+     * Set yaw rate (-180 to 180 degrees/sec)
+     * Rotation around vertical axis
+     */
+    //% blockId=drone_set_yaw
+    //% block="set yaw %value °/s"
+    //% value.min=-180 value.max=180
+    //% blockGap=8
+    //% weight=92
+    export function setYaw(value: number): void {
+        // Placeholder - maps to motor mix
+    }
+
+    // ===== SPECIALIZED EDUCATIONAL BLOCKS =====
+    
+    /**
+     * Enable/disable stability assist
+     * When disabled, students control raw motor outputs
+     * When enabled, IMU feedback helps stabilize
+     */
+    //% blockId=drone_set_stability
+    //% block="%enable stability assist"
+    //% enable.shadow="toggleOnOff"
+    //% enable.defl=true
+    //% blockGap=8
+    //% weight=50
+    export function setStability(enable: boolean): void {
+        // Placeholder - toggles between open-loop and closed-loop
+    }
+
+    /**
+     * Apply a manual control mix for testing
+     * Shows how throttle/pitch/roll/yaw map to motors
+     */
+    //% blockId=drone_apply_mixer
+    //% block="apply mixer | throttle %t | pitch %p | roll %r | yaw %y"
+    //% t.min=0 t.max=100
+    //% p.min=-45 p.max=45
+    //% r.min=-45 r.max=45
+    //% y.min=-180 y.max=180
+    //% blockGap=8
+    //% weight=80
+    export function applyMixer(t: number, p: number, r: number, y: number): void {
+        // Placeholder - demonstrates motor mixing equations
+    }
+
+    // ===== STATUS & DIAGNOSTICS =====
+
+    /**
+     * Check if drone is currently armed
+     * Returns true if motors can spin
+     */
+    //% blockId=drone_is_armed
+    //% block="is drone armed?"
+    //% blockGap=8
+    //% weight=30
+    export function isArmed(): boolean {
+        // Placeholder
+        return false;
+    }
+
+    /**
+     * Get current motor speeds as array [fl, fr, bl, br]
+     * Useful for data logging and debugging
+     */
+    //% blockId=drone_get_motor_speeds
+    //% block="get motor speeds"
+    //% blockGap=8
+    //% weight=20
+    export function getMotorSpeeds(): number[] {
+        // Placeholder
+        return [0, 0, 0, 0];
+    }
+
+    /**
+     * Emergency stop - immediately disarm motors
+     * Can be attached to button press or condition
+     */
+    //% blockId=drone_emergency_stop
+    //% block="emergency stop"
+    //% blockGap=8
+    //% weight=98
+    export function emergencyStop(): void {
+        // Placeholder - immediate disarm
+    }
+}
+
+// ===== IMU DATA ACQUISITION MODULE =====
+
+namespace imu {
+    /**
+     * Get raw accelerometer data [x, y, z] in m/s²
+     */
+    //% blockId=imu_get_accel
+    //% block="accelerometer (m/s²)"
+    //% blockGap=8
+    //% weight=90
+    export function getAccel(): number[] {
+        return [0, 0, -9.81]; // Placeholder
+    }
+
+    /**
+     * Get raw gyroscope data [x, y, z] in °/s
+     */
+    //% blockId=imu_get_gyro
+    //% block="gyroscope (°/s)"
+    //% blockGap=8
+    //% weight=89
+    export function getGyro(): number[] {
+        return [0, 0, 0]; // Placeholder
+    }
+
+    /**
+     * Get raw magnetometer data [x, y, z] in µT
+     */
+    //% blockId=imu_get_mag
+    //% block="magnetometer (µT)"
+    //% blockGap=8
+    //% weight=88
+    export function getMag(): number[] {
+        return [0, 0, 0]; // Placeholder
+    }
+
+    /**
+     * Get IMU temperature in °C
+     */
+    //% blockId=imu_get_temp
+    //% block="IMU temperature (°C)"
+    //% blockGap=8
+    //% weight=87
+    export function getTemperature(): number {
+        return 25.0; // Placeholder
+    }
+}
+
+
+// ===== FILTERING MODULE (Kalman/Complementary) =====
+
+namespace filter {
+    /**
+     * Complementary filter for attitude estimation
+     * alpha = 0.98 means 98% gyro, 2% accel
+     */
+    //% blockId=filter_complementary
+    //% block="complementary filter | gyro %gx %gy %gz | accel %ax %ay %az | alpha %alpha"
+    //% alpha.min=0 alpha.max=1 alpha.defl=0.98
+    //% blockGap=8
+    //% weight=70
+    export function complementary(gx: number, gy: number, gz: number, 
+                                  ax: number, ay: number, az: number, 
+                                  alpha: number): number[] {
+        return [0, 0, 0]; // Placeholder [roll, pitch, yaw]
+    }
+
+    /**
+     * Kalman filter step for single-axis angle estimation
+     * Returns [angle, bias] where angle is filtered estimate
+     */
+    //% blockId=filter_kalman
+    //% block="Kalman filter step | angle %angle | rate %rate | dt %dt | Q_angle %qa | Q_gyro %qg | R %r"
+    //% dt.min=0.001 dt.max=0.1
+    //% qa.min=0 qa.max=1
+    //% qg.min=0 qg.max=1
+    //% r.min=0 r.max=10
+    //% blockGap=8
+    //% weight=60
+    export function kalmanStep(angle: number, rate: number, dt: number, 
+                              qAngle: number, qGyro: number, r: number): number[] {
+        return [0, 0]; // Placeholder [filtered_angle, bias]
+    }
+
+    /**
+     * Simple moving average filter
+     * Useful for smoothing noisy sensor readings
+     */
+    //% blockId=filter_moving_avg
+    //% block="moving average | value %value | samples %samples"
+    //% samples.min=1 samples.max=100 samples.defl=10
+    //% blockGap=8
+    //% weight=80
+    export function movingAverage(value: number, samples: number): number {
+        return value; // Placeholder
+    }
+
+    /**
+     * Reset filter state
+     */
+    //% blockId=filter_reset
+    //% block="reset %filter filter"
+    //% filter.shadow="dropdown"
+    //% filter.options="complementary, kalman, moving_average"
+    //% blockGap=8
+    //% weight=50
+    export function reset(filter: string): void {
+        // Placeholder
+    }
+}
+
+
+// ===== PID CONTROLLER MODULE =====
+
+namespace pid {
+    /**
+     * Initialize PID controller with gains
+     * Returns a PID handle for use in update
+     */
+    //% blockId=pid_create
+    //% block="create PID | Kp %kp | Ki %ki | Kd %kd | setpoint %sp | name %name"
+    //% kp.min=0 kp.max=10 kp.defl=1.0
+    //% ki.min=0 ki.max=10 ki.defl=0.1
+    //% kd.min=0 kd.max=10 kd.defl=0.05
+    //% sp.min=-180 sp.max=180 sp.defl=0
+    //% name.defl="roll_pid"
+    //% blockGap=8
+    //% weight=90
+    export function create(kp: number, ki: number, kd: number, 
+                           setpoint: number, name: string): number {
+        return 0; // Placeholder - returns PID handle ID
+    }
+
+    /**
+     * Update PID controller with new measurement
+     * Returns the control output
+     */
+    //% blockId=pid_update
+    //% block="update PID %pid | measurement %measure | dt %dt"
+    //% dt.min=0.001 dt.max=0.1
+    //% blockGap=8
+    //% weight=89
+    export function update(pid: number, measure: number, dt: number): number {
+        return 0; // Placeholder - returns output
+    }
+
+    /**
+     * Set PID output limits
+     * Prevents windup and excessive control
+     */
+    //% blockId=pid_set_limits
+    //% block="set PID %pid | limits | min %min | max %max"
+    //% min.defl=-100 max.defl=100
+    //% blockGap=8
+    //% weight=85
+    export function setLimits(pid: number, min: number, max: number): void {
+        // Placeholder
+    }
+
+    /**
+     * Tune PID gains online (while drone is running)
+     * Real-time tuning for educational purposes
+     */
+    //% blockId=pid_tune
+    //% block="tune PID %pid | Kp %kp | Ki %ki | Kd %kd"
+    //% kp.min=0 kp.max=10
+    //% ki.min=0 ki.max=10
+    //% kd.min=0 kd.max=10
+    //% blockGap=8
+    //% weight=80
+    export function tune(pid: number, kp: number, ki: number, kd: number): void {
+        // Placeholder
+    }
+
+    /**
+     * Get PID error terms for debugging
+     * Returns [P_term, I_term, D_term, error]
+     */
+    //% blockId=pid_get_terms
+    //% block="get PID %pid terms"
+    //% blockGap=8
+    //% weight=70
+    export function getTerms(pid: number): number[] {
+        return [0, 0, 0, 0]; // Placeholder
+    }
+
+    /**
+     * Reset PID integrator (clear integral windup)
+     */
+    //% blockId=pid_reset
+    //% block="reset PID %pid"
+    //% blockGap=8
+    //% weight=60
+    export function reset(pid: number): void {
+        // Placeholder
+    }
+}
+
+
+// ===== DATA LOGGING MODULE =====
+
+namespace logger {
+    /**
+     * Log a value with label for real-time plotting
+     * Data appears in MakeCode console/data viewer
+     */
+    //% blockId=logger_log
+    //% block="log %label | value %value"
+    //% blockGap=8
+    //% weight=90
+    export function log(label: string, value: number): void {
+        // Placeholder - serial output for data viewer
+        //console.logValue(label, value);
+    }
+
+    /**
+     * Log multiple values as a dataset
+     */
+    //% blockId=logger_log_array
+    //% block="log dataset %labels | values %values"
+    //% blockGap=8
+    //% weight=80
+    export function logArray(labels: string[], values: number[]): void {
+        // Placeholder
+    }
+
+    /**
+     * Start/stop data recording to CSV
+     */
+    //% blockId=logger_record
+    //% block="%start recording to CSV"
+    //% start.shadow="toggleOnOff"
+    //% blockGap=8
+    //% weight=70
+    export function record(start: boolean): void {
+        // Placeholder
+    }
+}
