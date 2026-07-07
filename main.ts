@@ -494,6 +494,7 @@ namespace droneIMUV3 {
     }
 }
 
+//% weight=100 color=#2E7D32 icon="\f860" block="Drone IMU V3 MIN 129"
 namespace drone {
     // ===== INITIALIZATION & SAFETY =====
     /**
@@ -667,7 +668,7 @@ namespace drone {
 }
 
 // ===== IMU DATA ACQUISITION MODULE =====
-
+//% weight=100 color=#2E7D32 icon="\f625" block="IMU Data"
 namespace imu {
     /**
      * Get raw accelerometer data [x, y, z] in m/s²
@@ -716,7 +717,7 @@ namespace imu {
 
 
 // ===== FILTERING MODULE (Kalman/Complementary) =====
-
+//% weight=100 color=#2E7D32 icon="\f0b0" block="IMU Filter"
 namespace filter {
     /**
      * Complementary filter for attitude estimation
@@ -779,7 +780,7 @@ namespace filter {
 
 
 // ===== PID CONTROLLER MODULE =====
-
+//% weight=100 color=#2E7D32 icon="\f67e" block="PID Controller"
 namespace pid {
     /**
      * Initialize PID controller with gains
@@ -866,7 +867,7 @@ namespace pid {
 
 
 // ===== DATA LOGGING MODULE =====
-
+//% weight=100 color=#2E7D32 icon="\f201" block="Data Logger"
 namespace logger {
     /**
      * Log a value with label for real-time plotting
