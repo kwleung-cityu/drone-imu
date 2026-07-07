@@ -40,6 +40,12 @@ What it does:
 ./release.ps1 v1.0.32 -Branch feature/my-branch
 ```
 
+- Include intentional pending edits in the release commit:
+
+```powershell
+./release.ps1 v1.0.32 -IncludeAllChanges
+```
+
 ## Manual fallback flow
 
 ```powershell
