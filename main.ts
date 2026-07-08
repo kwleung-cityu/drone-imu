@@ -780,7 +780,7 @@ namespace filter {
 
 
 // ===== PID CONTROLLER MODULE =====
-//% weight=100 color=#2E7D32 icon="\uf67e" block="PID Controller"
+//% weight=100 color=#2E7D32 icon="\uf698" block="PID algorithm"
 namespace pid {
     /**
      * Initialize PID controller with gains
