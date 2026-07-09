@@ -7,7 +7,7 @@ Current build signature code: `41029`
 
 ## Current Status
 
-Validated as of `v1.0.29`:
+Validated as of `v1.0.43`:
 
 1. MakeCode dependency pinning by tag is the reliable update path.
 2. WHO_AM_I at address `0x68` returns `104` on the verified hardware.
@@ -51,7 +51,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.29"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.43"
 }
 ```
 

@@ -1,23 +1,16 @@
-declare namespace droneIMUV3 {
-	//% shim=droneIMUV3::nativeConst123
-	function nativeConst123(): number;
+// Auto-generated. Do not edit.
+declare namespace imu {
 
-	//% shim=droneIMUV3::imuReadReg
-	function imuReadReg(addr: number, reg: number): number;
-
-	//% shim=droneIMUV3::imuWriteReg
-	function imuWriteReg(addr: number, reg: number, value: number): void;
-
-	//% shim=droneIMUV3::imuReadWord
-	function imuReadWord(addr: number, regHigh: number): number;
-
-	//% shim=droneIMUV3::imuReadSensorPacket14
-	function imuReadSensorPacket14(addr: number): Buffer;
-
-	//% shim=droneIMUV3::imuRun100HzBurstReadToggleTest
-	function imuRun100HzBurstReadToggleTest(addr: number, pinId: number, cycles: number): number;
-
-	//% shim=droneIMUV3::imuRun100HzToggleTest
-	function imuRun100HzToggleTest(addr: number, pinId: number, cycles: number, includeRead: boolean): number;
+    /**
+     * @brief Burst read multiple registers from the MPU6050
+     * @param devAddr Device I2C address (7-bit)
+     * @param startReg Starting register address to read
+     * @param buffer Pointer to the buffer to store read data
+     * @param length Number of bytes to read
+     * @return Number of bytes read
+     */
+    //% shim=imu::imuInit
+    function imuInit(): void;
 }
 
+// Auto-generated. Do not edit. Really.
