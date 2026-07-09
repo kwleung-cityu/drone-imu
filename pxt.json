@@ -1,6 +1,6 @@
 {
     "name":  "drone-imu-v3-min",
-    "version":  "1.0.45",
+    "version":  "1.0.46",
     "description":  "Drone IMU V3 C++ burst-read timing test for DSO validation",
     "license":  "MIT",
     "dependencies":  {

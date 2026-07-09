@@ -724,7 +724,8 @@ namespace drone {
 //% weight=100 color=#2E7D32 icon="\uf080" block="IMU Data"
 namespace imu {
 
-    //% blockId=imu_init block="initialize IMU"
+    //% blockId=imu_init
+    //% block="Initialize IMU"
     //% blockGap=8
     //% weight=100
     export function init(): void {
@@ -789,7 +790,7 @@ namespace imu {
     //% weight=87
     export function getTemperature(): number {
             const nativeReadTemperature = (imu as any).imuReadTemperature
-            if (!nativeReadTemperature) return 25.0
+            if (!nativeReadTemperature) return 0.0 //error case
 
          const TEMP_SCALE = 1.0 / 340.0; // Convert raw to °C
             const temp = nativeReadTemperature() * TEMP_SCALE + 36.53; // Add offset
@@ -946,7 +947,7 @@ namespace pid {
 }
 
 // ===== MOTOR CONTROL MODULE =====
-//% weight=100 color=#2E7D32 icon="\uf3f6" block="Motor Control"
+//% weight=100 color=#2E7D32 icon="\uf1b6" block="Motor Control"
 namespace motor {
 
     /**
@@ -954,10 +955,10 @@ namespace motor {
      * Motor ID: 0=front-left, 1=front-right, 2=back-left, 3=back-right
      */
     //% blockId=motor_set_speed
-    //% block="set motor %motorId speed %pwm"
+    //% block="set motor %motorId duty cycle %dutyCycle"
     //% motorId.min=0 motorId.max=3
-    //% pwm.min=0 pwm.max=100
-    export function setMotorSpeed(motorId: number, pwm: number): void {
+    //% dutyCycle.min=0 dutyCycle.max=100
+    export function setMotorSpeed(motorId: number, dutyCycle: number): void {
         // Placeholder - set individual motor speed (0-100)
     }
 }
