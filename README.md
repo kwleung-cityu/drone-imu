@@ -2,12 +2,9 @@
 
 This repository is used for MakeCode extension rebuild and cache-safe release testing.
 
-Current build signature: `V3-MIN-SIG-20260704-C`
-Current build signature code: `41029`
-
 ## Current Status
 
-Validated as of `v1.0.43`:
+Validated as of `v1.0.45`:
 
 1. MakeCode dependency pinning by tag is the reliable update path.
 2. WHO_AM_I at address `0x68` returns `104` on the verified hardware.
@@ -51,7 +48,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.44"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.45"
 }
 ```
 

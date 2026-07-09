@@ -859,8 +859,8 @@ namespace filter {
     }
 }
 
-// ===== PID CONTROLLER MODULE (icon="\uf12b" or "\uf698") =====
-//% weight=100 color=#2E7D32 icon="\uf698" block="PID Algorithm"
+// ===== PID CONTROLLER MODULE =====
+//% weight=100 color=#2E7D32 icon="\uf12b" block="PID Algorithm"
 namespace pid {
     /**
      * Initialize PID controller with gains
@@ -949,6 +949,17 @@ namespace pid {
 //% weight=100 color=#2E7D32 icon="\uf3f6" block="Motor Control"
 namespace motor {
 
+    /**
+     * Set individual motor speed (0-100)
+     * Motor ID: 0=front-left, 1=front-right, 2=back-left, 3=back-right
+     */
+    //% blockId=motor_set_speed
+    //% block="set motor %motorId speed %pwm"
+    //% motorId.min=0 motorId.max=3
+    //% pwm.min=0 pwm.max=100
+    export function setMotorSpeed(motorId: number, pwm: number): void {
+        // Placeholder - set individual motor speed (0-100)
+    }
 }
 
 // ===== DATA LOGGING MODULE =====
