@@ -782,15 +782,32 @@ namespace imu {
     }
 
     // Small helpers for Python scripts and serial diagnostics.
+    // These return acceleration in m/s^2.
     export function readAx(): number {
-        return imuReadAccelX()
+        const accelLsbPerG = imuGetAccelLsbPerG()
+        return imuReadAccelX() * (9.81 / accelLsbPerG)
     }
 
     export function readAy(): number {
-        return imuReadAccelY()
+        const accelLsbPerG = imuGetAccelLsbPerG()
+        return imuReadAccelY() * (9.81 / accelLsbPerG)
     }
 
     export function readAz(): number {
+        const accelLsbPerG = imuGetAccelLsbPerG()
+        return imuReadAccelZ() * (9.81 / accelLsbPerG)
+    }
+
+    // Explicit raw-value helpers (LSB) for debugging/calibration.
+    export function readAxRaw(): number {
+        return imuReadAccelX()
+    }
+
+    export function readAyRaw(): number {
+        return imuReadAccelY()
+    }
+
+    export function readAzRaw(): number {
         return imuReadAccelZ()
     }
 
@@ -804,6 +821,18 @@ namespace imu {
 
     export function read_az(): number {
         return readAz()
+    }
+
+    export function read_ax_raw(): number {
+        return readAxRaw()
+    }
+
+    export function read_ay_raw(): number {
+        return readAyRaw()
+    }
+
+    export function read_az_raw(): number {
+        return readAzRaw()
     }
 }
 
