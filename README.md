@@ -7,7 +7,7 @@ Current build signature code: `41029`
 
 ## Current Status
 
-Validated as of `v1.0.41`:
+Validated as of `v1.0.42`:
 
 1. MakeCode dependency pinning by tag is the reliable update path.
 2. WHO_AM_I at address `0x68` returns `104` on the verified hardware.

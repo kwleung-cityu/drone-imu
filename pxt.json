@@ -1,6 +1,6 @@
 {
     "name":  "drone-imu-v3-min",
-    "version":  "1.0.41",
+    "version":  "1.0.42",
     "description":  "Drone IMU V3 C++ burst-read timing test for DSO validation",
     "license":  "MIT",
     "dependencies":  {
@@ -9,6 +9,10 @@
                      },
     "files":  [
                   "shims.d.ts",
+                  "ringBuffer.h",
+                  "ringBuffer.cpp",
+                  "imu.h",
+                  "imu.cpp",
                   "droneIMU.cpp",
                   "main.ts"
               ],

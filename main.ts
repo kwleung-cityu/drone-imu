@@ -1,6 +1,58 @@
 /**
  * Drone IMU V3 minimal diagnostic baseline.
  */
+declare namespace droneIMUV3 {
+    //% shim=droneIMUV3::imuReadReg
+    function imuReadReg(addr: number, reg: number): number
+
+    //% shim=droneIMUV3::imuWriteReg
+    function imuWriteReg(addr: number, reg: number, value: number): void
+
+    //% shim=droneIMUV3::imuReadWord
+    function imuReadWord(addr: number, regHigh: number): number
+
+    //% shim=droneIMUV3::imuReadSensorPacket14
+    function imuReadSensorPacket14(addr: number): Buffer
+
+    //% shim=droneIMUV3::imuRun100HzToggleTest
+    function imuRun100HzToggleTest(addr: number, pinId: number, cycles: number, includeRead: boolean): number
+
+    //% shim=droneIMUV3::imuRun100HzBurstReadToggleTest
+    function imuRun100HzBurstReadToggleTest(addr: number, pinId: number, cycles: number): number
+}
+
+declare namespace imu {
+    //% shim=imu::imuReadAccelX
+    function imuReadAccelX(): number
+
+    //% shim=imu::imuReadAccelY
+    function imuReadAccelY(): number
+
+    //% shim=imu::imuReadAccelZ
+    function imuReadAccelZ(): number
+
+    //% shim=imu::imuReadGyroX
+    function imuReadGyroX(): number
+
+    //% shim=imu::imuReadGyroY
+    function imuReadGyroY(): number
+
+    //% shim=imu::imuReadGyroZ
+    function imuReadGyroZ(): number
+
+    //% shim=imu::imuReadTemperature
+    function imuReadTemperature(): number
+
+    //% shim=imu::imuInit
+    function imuInit(): void
+
+    //% shim=imu::imuGetAccelLsbPerG
+    function imuGetAccelLsbPerG(): number
+
+    //% shim=imu::imuGetGyroLsbPerDps
+    function imuGetGyroLsbPerDps(): number
+}
+
 //% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 129"
 namespace droneIMUV3 {
     const BUILD_SIGNATURE = "V3-MIN-SIG-20260704-C"
@@ -32,19 +84,19 @@ namespace droneIMUV3 {
     }
 
     function readReg(addr: number, reg: number): number {
-        return imuReadReg(addr, reg)
+        return droneIMUV3.imuReadReg(addr, reg)
     }
 
     function readWord(addr: number, regHigh: number): number {
-        return imuReadWord(addr, regHigh)
+        return droneIMUV3.imuReadWord(addr, regHigh)
     }
 
     function readSensorPacketAt(addr: number): Buffer {
-        return imuReadSensorPacket14(addr)
+        return droneIMUV3.imuReadSensorPacket14(addr)
     }
 
     function writeReg(addr: number, reg: number, value: number): void {
-        imuWriteReg(addr, reg, value)
+        droneIMUV3.imuWriteReg(addr, reg, value)
     }
 
     function configureAt(addr: number): void {
@@ -314,7 +366,7 @@ namespace droneIMUV3 {
     //% includeRead.defl=true
     //% weight=82
     export function run100HzToggleTest(pin: number, cycles: number, includeRead: boolean): number {
-        return imuRun100HzToggleTest(activeAddr, pin, cycles, includeRead)
+        return droneIMUV3.imuRun100HzToggleTest(activeAddr, pin, cycles, includeRead)
     }
 
     //% blockId=droneimuv3_run100hzburst block="run 100Hz burst-read toggle test pin %pin cycles %cycles"
@@ -322,7 +374,7 @@ namespace droneIMUV3 {
     //% cycles.defl=200 cycles.min=1
     //% weight=81
     export function run100HzBurstReadToggleTest(pin: number, cycles: number): number {
-        return imuRun100HzBurstReadToggleTest(activeAddr, pin, cycles)
+        return droneIMUV3.imuRun100HzBurstReadToggleTest(activeAddr, pin, cycles)
     }
 
     //% blockId=droneimuv3_reset_gyro_bias block="reset gyro bias"
@@ -670,37 +722,48 @@ namespace drone {
 // ===== IMU DATA ACQUISITION MODULE =====
 //% weight=100 color=#2E7D32 icon="\uf080" block="IMU Data"
 namespace imu {
+
+    //% blockId=imu_init block="initialize IMU"
+    //% blockGap=8
+    //% weight=100
+    export function init(): void {
+        imu.imuInit();
+    }
+
     /**
-     * Get raw accelerometer data [x, y, z] in m/s²
+     * Get raw accelerometer data [ax, ay, az] in m/s²
      */
     //% blockId=imu_get_accel
     //% block="accelerometer (m/s²)"
     //% blockGap=8
     //% weight=90
     export function getAccel(): number[] {
-        return [0, 0, -9.81]; // Placeholder
+        const accelLsbPerG = imu.imuGetAccelLsbPerG()
+        const ACCEL_SCALE = 9.81 / accelLsbPerG;
+    
+        const ax = imu.imuReadAccelX() * ACCEL_SCALE;
+        const ay = imu.imuReadAccelY() * ACCEL_SCALE;
+        const az = imu.imuReadAccelZ() * ACCEL_SCALE;
+    
+        return [ax, ay, az];
     }
 
     /**
-     * Get raw gyroscope data [x, y, z] in °/s
+     * Get raw gyroscope data [gx, gy, gz] in °/s
      */
     //% blockId=imu_get_gyro
     //% block="gyroscope (°/s)"
     //% blockGap=8
     //% weight=89
     export function getGyro(): number[] {
-        return [0, 0, 0]; // Placeholder
-    }
+        const gyroLsbPerDps = imu.imuGetGyroLsbPerDps()
+        const GYRO_SCALE = 1.0 / gyroLsbPerDps;
 
-    /**
-     * Get raw magnetometer data [x, y, z] in µT
-     */
-    //% blockId=imu_get_mag
-    //% block="magnetometer (µT)"
-    //% blockGap=8
-    //% weight=88
-    export function getMag(): number[] {
-        return [0, 0, 0]; // Placeholder
+        const gx = imu.imuReadGyroX() * GYRO_SCALE;
+        const gy = imu.imuReadGyroY() * GYRO_SCALE;
+        const gz = imu.imuReadGyroZ() * GYRO_SCALE;
+
+        return [gx, gy, gz];
     }
 
     /**
@@ -711,13 +774,15 @@ namespace imu {
     //% blockGap=8
     //% weight=87
     export function getTemperature(): number {
-        return 25.0; // Placeholder
+         const TEMP_SCALE = 1.0 / 340.0; // Convert raw to °C
+         const temp = imu.imuReadTemperature() * TEMP_SCALE + 36.53; // Add offset
+         return temp;
     }
 }
 
 
 // ===== FILTERING MODULE (Kalman/Complementary) =====
-//% weight=100 color=#2E7D32 icon="\uf0b0" block="Filtering"
+//% weight=100 color=#2E7D32 icon="\uf0b0" block="Kalman Filter"
 namespace filter {
     /**
      * Complementary filter for attitude estimation
