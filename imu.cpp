@@ -129,7 +129,7 @@ namespace imu {
         initRingBuffer(&imuRingBuffer);
 
         // Wake up the MPU6050 (clear sleep bit).
-        imuRegWrite(MPU6050_ADDR, MPU6050_PWR_MGMT_1, 0x00);
+        imuRegWrite(MPU6050_ADDR, MPU6050_PWR_MGMT_1, 0x00);    // Clear sleep bit to wake up the device
         uBit.sleep(100); // Wait for the device to stabilize
 
         const uint8_t dlpfCfg = sanitizeDlpfMode(imuConfig.dlpfMode);

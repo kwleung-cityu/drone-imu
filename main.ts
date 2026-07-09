@@ -53,6 +53,7 @@ declare namespace imu {
     function imuGetGyroLsbPerDps(): number
 }
 
+//Search icons from https://fontawesome.com/search?ic=free-collection
 //% weight=100 color=#2E7D32 icon="\uf2db" block="Drone IMU V3 MIN 129"
 namespace droneIMUV3 {
     const BUILD_SIGNATURE = "V3-MIN-SIG-20260704-C"
@@ -546,11 +547,7 @@ namespace droneIMUV3 {
     }
 }
 
-<<<<<<< HEAD
-//% weight=100 color=#2E7D32 icon="\uf860" block="Drone Control"
-=======
 //% weight=100 color=#2E7D32 icon="\uf1de" block="Drone Control"
->>>>>>> 24b774fcaecef5178154081532fca2103e347e73
 namespace drone {
     // ===== INITIALIZATION & SAFETY =====
     /**
@@ -724,11 +721,7 @@ namespace drone {
 }
 
 // ===== IMU DATA ACQUISITION MODULE =====
-<<<<<<< HEAD
-//% weight=100 color=#2E7D32 icon="\uf625" block="IMU Data"
-=======
 //% weight=100 color=#2E7D32 icon="\uf080" block="IMU Data"
->>>>>>> 24b774fcaecef5178154081532fca2103e347e73
 namespace imu {
 
     //% blockId=imu_init block="initialize IMU"
@@ -804,13 +797,8 @@ namespace imu {
     }
 }
 
-
 // ===== FILTERING MODULE (Kalman/Complementary) =====
-<<<<<<< HEAD
-//% weight=100 color=#2E7D32 icon="\uf0b0" block="Filter"
-=======
 //% weight=100 color=#2E7D32 icon="\uf0b0" block="Kalman Filter"
->>>>>>> 24b774fcaecef5178154081532fca2103e347e73
 namespace filter {
     /**
      * Complementary filter for attitude estimation
@@ -871,13 +859,8 @@ namespace filter {
     }
 }
 
-
-// ===== PID CONTROLLER MODULE =====
-<<<<<<< HEAD
-//% weight=100 color=#2E7D32 icon="\uf67e" block="PID Controller"
-=======
-//% weight=100 color=#2E7D32 icon="\uf12b" block="PID Algorithm"
->>>>>>> 24b774fcaecef5178154081532fca2103e347e73
+// ===== PID CONTROLLER MODULE (icon="\uf12b" or "\uf698") =====
+//% weight=100 color=#2E7D32 icon="\uf698" block="PID Algorithm"
 namespace pid {
     /**
      * Initialize PID controller with gains
@@ -962,13 +945,14 @@ namespace pid {
     }
 }
 
+// ===== MOTOR CONTROL MODULE =====
+//% weight=100 color=#2E7D32 icon="\uf3f6" block="Motor Control"
+namespace motor {
+
+}
 
 // ===== DATA LOGGING MODULE =====
-<<<<<<< HEAD
-//% weight=100 color=#2E7D32 icon="\uf201" block="Data Logger"
-=======
 //% weight=100 color=#2E7D32 icon="\uf1c0" block="Data Logger"
->>>>>>> 24b774fcaecef5178154081532fca2103e347e73
 namespace logger {
     /**
      * Log a value with label for real-time plotting

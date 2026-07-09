@@ -51,7 +51,7 @@ Use this workflow instead:
 ```json
 "dependencies": {
     "core": "*",
-    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.43"
+    "drone-imu-v3-min": "github:kwleung-cityu/drone-imu#v1.0.44"
 }
 ```
 
