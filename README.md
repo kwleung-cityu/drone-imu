@@ -4,7 +4,11 @@ This repository is used for MakeCode extension rebuild and cache-safe release te
 
 ## Current Status
 
-Validated as of `v1.0.48`:
+Validated as of `v1.0.49`:
+
+```powershell
+./release.ps1 v1.0.49 -IncludeAllChanges
+```
 
 1. MakeCode dependency pinning by tag is the reliable update path.
 2. WHO_AM_I at address `0x68` returns `104` on the verified hardware.
