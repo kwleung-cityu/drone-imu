@@ -727,7 +727,8 @@ namespace imu {
     //% blockGap=8
     //% weight=100
     export function init(): void {
-        imu.imuInit();
+        const nativeInit = (imu as any).imuInit
+        if (nativeInit) nativeInit()
     }
 
     /**
@@ -738,12 +739,18 @@ namespace imu {
     //% blockGap=8
     //% weight=90
     export function getAccel(): number[] {
-        const accelLsbPerG = imu.imuGetAccelLsbPerG()
+        const nativeReadAccelX = (imu as any).imuReadAccelX
+        const nativeReadAccelY = (imu as any).imuReadAccelY
+        const nativeReadAccelZ = (imu as any).imuReadAccelZ
+        const nativeAccelScale = (imu as any).imuGetAccelLsbPerG
+        if (!nativeReadAccelX || !nativeReadAccelY || !nativeReadAccelZ || !nativeAccelScale) return [0, 0, 0]
+
+        const accelLsbPerG = nativeAccelScale()
         const ACCEL_SCALE = 9.81 / accelLsbPerG;
     
-        const ax = imu.imuReadAccelX() * ACCEL_SCALE;
-        const ay = imu.imuReadAccelY() * ACCEL_SCALE;
-        const az = imu.imuReadAccelZ() * ACCEL_SCALE;
+        const ax = nativeReadAccelX() * ACCEL_SCALE;
+        const ay = nativeReadAccelY() * ACCEL_SCALE;
+        const az = nativeReadAccelZ() * ACCEL_SCALE;
     
         return [ax, ay, az];
     }
@@ -756,12 +763,18 @@ namespace imu {
     //% blockGap=8
     //% weight=89
     export function getGyro(): number[] {
-        const gyroLsbPerDps = imu.imuGetGyroLsbPerDps()
+        const nativeReadGyroX = (imu as any).imuReadGyroX
+        const nativeReadGyroY = (imu as any).imuReadGyroY
+        const nativeReadGyroZ = (imu as any).imuReadGyroZ
+        const nativeGyroScale = (imu as any).imuGetGyroLsbPerDps
+        if (!nativeReadGyroX || !nativeReadGyroY || !nativeReadGyroZ || !nativeGyroScale) return [0, 0, 0]
+
+        const gyroLsbPerDps = nativeGyroScale()
         const GYRO_SCALE = 1.0 / gyroLsbPerDps;
 
-        const gx = imu.imuReadGyroX() * GYRO_SCALE;
-        const gy = imu.imuReadGyroY() * GYRO_SCALE;
-        const gz = imu.imuReadGyroZ() * GYRO_SCALE;
+        const gx = nativeReadGyroX() * GYRO_SCALE;
+        const gy = nativeReadGyroY() * GYRO_SCALE;
+        const gz = nativeReadGyroZ() * GYRO_SCALE;
 
         return [gx, gy, gz];
     }
@@ -774,8 +787,11 @@ namespace imu {
     //% blockGap=8
     //% weight=87
     export function getTemperature(): number {
+            const nativeReadTemperature = (imu as any).imuReadTemperature
+            if (!nativeReadTemperature) return 25.0
+
          const TEMP_SCALE = 1.0 / 340.0; // Convert raw to °C
-         const temp = imu.imuReadTemperature() * TEMP_SCALE + 36.53; // Add offset
+            const temp = nativeReadTemperature() * TEMP_SCALE + 36.53; // Add offset
          return temp;
     }
 }
