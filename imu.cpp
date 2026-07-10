@@ -200,13 +200,15 @@ namespace imu {
     #define MICROBIT_SCL_PIN 27 // P19
     #define MICROBIT_SDA_PIN 32 // P20 
 
-    static void halSetFastI2C() {   
+    static void halSetFastI2C() {
+        uBit.sleep(5);
         // Apply the 390kHz register override
         NRF_TWI1->FREQUENCY = TWI_FREQUENCY_390K;
 
         // Apply High Drive (H0H1) configurations
         nrf_gpio_cfg(MICROBIT_SCL_PIN, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_H0H1, NRF_GPIO_PIN_NOSENSE);
         nrf_gpio_cfg(MICROBIT_SDA_PIN, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_H0H1, NRF_GPIO_PIN_NOSENSE);
+        uBit.sleep(5);
     }
 
     // Helper function to initialize the IMU with settings from imu.h
