@@ -195,33 +195,8 @@ namespace imu {
     }
 
     // Helper function to set I2C pins to high drive mode for 400kHz operation
-    // Define the missing Nordic macro manually
-    #define TWI_FREQUENCY_390K 0x06200000
-    #define MICROBIT_SCL_PIN 27 // P19
-    #define MICROBIT_SDA_PIN 32 // P20 
-
     static void halSetFastI2C() {
-        uBit.sleep(5);
-        
-        // Force the 390kHz register override on ALL potential I2C hardware instances.
-        // This removes the guesswork of whether CODAL bound to TWIM0, TWIM1, TWI0, or TWI1.
-        #if defined(NRF_TWIM0)
-        NRF_TWIM0->FREQUENCY = TWI_FREQUENCY_390K;
-        #endif
-        #if defined(NRF_TWI0)
-        NRF_TWI0->FREQUENCY  = TWI_FREQUENCY_390K;
-        #endif
-        #if defined(NRF_TWIM1)
-        NRF_TWIM1->FREQUENCY = TWI_FREQUENCY_390K;
-        #endif
-        #if defined(NRF_TWI1)
-        NRF_TWI1->FREQUENCY  = TWI_FREQUENCY_390K;
-        #endif
-
-        // Apply High Drive (H0H1) configurations
-        nrf_gpio_cfg(MICROBIT_SCL_PIN, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_H0H1, NRF_GPIO_PIN_NOSENSE);
-        nrf_gpio_cfg(MICROBIT_SDA_PIN, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_H0H1, NRF_GPIO_PIN_NOSENSE);
-        uBit.sleep(5);
+        //pending implementation: set the I2C pins to high drive mode for 400kHz operation
     }
 
     // Helper function to initialize the IMU with settings from imu.h
@@ -266,8 +241,6 @@ namespace imu {
 
         // Enable interrupt for DATA_RDY if imuConfig.enableInterrupts is true
         imuRegWrite(MPU6050_ADDR, MPU6050_INT_ENABLE, intEnable);
-
-        halSetFastI2C(); // Set I2C pins to high drive mode for 400kHz operation
     } 
 
     //%
