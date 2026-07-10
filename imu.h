@@ -11,6 +11,9 @@
 
 #include "pxt.h"
 
+// Pin definition for INT on micro:bit
+#define MPU6050_INT_PIN      MICROBIT_PIN_P0  // Change as needed e.g. MICROBIT_PIN_P1, MICROBIT_PIN_P2, etc.
+
 // DLPF Configuration modes for MPU6050
 enum DLPFMode : uint8_t {
         DLPF_260_HZ = 0,   // Accel: 260Hz, Gyro: 256Hz, Delay: 0ms
@@ -42,9 +45,11 @@ enum GyroRange : uint8_t {
 struct imuConfig_t {
     AccelRange accelRange = ACCEL_RANGE_2G;
     GyroRange gyroRange = GYRO_RANGE_250DPS;
-    DLPFMode dlpfMode = DLPF_94_HZ;    // Default: 94Hz bandwith (good balance)
-    int sampleRate = 50;                // Hz (1-1000)
-    bool enableInterrupts = false;
+    DLPFMode dlpfMode = DLPF_94_HZ;    // Default: 94Hz bandwith
+    int sampleRate = 166;              // set SMPRT_DIV to achieve this sample rate (in Hz)
+                                       // We will use dt=0.006 (1/166) in Kalman filter because of this sample rate.
+                                       // Why sampleRate=166 and dt=0.006? Read `Configuring DLPF and Sample Rate on MPU6050.md`
+    bool enableInterrupts = true;      // Enable DATA_RDY interrupt for IMU data ready
     // Calculated field based on DLPF mode (read-only in practice)
     float getAccelBandwidth() const {
         switch(dlpfMode) {
