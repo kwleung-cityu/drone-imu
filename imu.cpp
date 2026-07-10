@@ -1,5 +1,6 @@
 #include "imu.h"
 #include "ringBuffer.h"
+#include "MicroBit.h"
 
 #if MICROBIT_CODAL
 #define BUFFER_TYPE uint8_t *
@@ -193,9 +194,22 @@ namespace imu {
         }
     }
 
+    // Helper function to set I2C pins to high drive mode for 400kHz operation
+    static void halSetFastI2C() {       
+        // For nRF52833/nRF52840, set TWI frequency register
+        // The TWI instance used by micro:bit is NRF_TWI1 (I2C1)
+        
+        // 0x01980000 = 400kHz (Fast mode)
+        // 0x06200000 = 250kHz
+        // 0x01E00000 = 100kHz (Standard mode)
+        NRF_TWI1->FREQUENCY = 0x01980000;
+    }
+
     // Helper function to initialize the IMU with settings from imu.h
     //%
     void imuInit() {
+        halSetFastI2C(); // Set I2C pins to high drive mode for 400kHz operation
+
         initRingBuffer(&imuRingBuffer);
 
         // Wake up the MPU6050 (clear sleep bit).

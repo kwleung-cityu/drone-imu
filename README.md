@@ -4,10 +4,10 @@ This repository is used for MakeCode extension rebuild and cache-safe release te
 
 ## Current Status
 
-Validated as of `v1.0.50`:
+Validated as of `v1.0.51`:
 
 ```powershell
-./release.ps1 v1.0.50 -IncludeAllChanges
+./release.ps1 v1.0.51 -IncludeAllChanges
 ```
 
 1. MakeCode dependency pinning by tag is the reliable update path.
