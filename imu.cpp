@@ -202,8 +202,21 @@ namespace imu {
 
     static void halSetFastI2C() {
         uBit.sleep(5);
-        // Apply the 390kHz register override
-        NRF_TWI1->FREQUENCY = TWI_FREQUENCY_390K;
+        
+        // Force the 390kHz register override on ALL potential I2C hardware instances.
+        // This removes the guesswork of whether CODAL bound to TWIM0, TWIM1, TWI0, or TWI1.
+        #if defined(NRF_TWIM0)
+        NRF_TWIM0->FREQUENCY = TWI_FREQUENCY_390K;
+        #endif
+        #if defined(NRF_TWI0)
+        NRF_TWI0->FREQUENCY  = TWI_FREQUENCY_390K;
+        #endif
+        #if defined(NRF_TWIM1)
+        NRF_TWIM1->FREQUENCY = TWI_FREQUENCY_390K;
+        #endif
+        #if defined(NRF_TWI1)
+        NRF_TWI1->FREQUENCY  = TWI_FREQUENCY_390K;
+        #endif
 
         // Apply High Drive (H0H1) configurations
         nrf_gpio_cfg(MICROBIT_SCL_PIN, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_H0H1, NRF_GPIO_PIN_NOSENSE);
