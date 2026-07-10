@@ -1,6 +1,6 @@
 #include "imu.h"
 #include "ringBuffer.h"
-#include "MicroBit.h"
+#include "nrf_gpio.h"
 
 #if MICROBIT_CODAL
 #define BUFFER_TYPE uint8_t *
@@ -195,14 +195,21 @@ namespace imu {
     }
 
     // Helper function to set I2C pins to high drive mode for 400kHz operation
-    static void halSetFastI2C() {       
-        // For nRF52833/nRF52840, set TWI frequency register
-        // The TWI instance used by micro:bit is NRF_TWI1 (I2C1)
-        
-        // 0x01980000 = 400kHz (Fast mode)
-        // 0x06200000 = 250kHz
-        // 0x01E00000 = 100kHz (Standard mode)
-        NRF_TWI1->FREQUENCY = TWI_FREQUENCY_FREQUENCY_K400;
+    // Define the missing Nordic macro manually
+    #ifndef NRF_GPIO_PIN_MAP
+    #define NRF_GPIO_PIN_MAP(port, pin) (((port) << 5) | ((pin) & 0x1F))
+    #endif
+
+    #define TWI_FREQUENCY_390K 0x06200000
+    #define MICROBIT_SCL_PIN NRF_GPIO_PIN_MAP(0, 27) // P19 -> Evaluates to 27
+    #define MICROBIT_SDA_PIN NRF_GPIO_PIN_MAP(1, 0)  // P20 -> Evaluates to 32  
+    static void halSetFastI2C() {   
+        // Apply the 390kHz register override
+        NRF_TWI1->FREQUENCY = TWI_FREQUENCY_390K;
+
+        // Apply High Drive (H0H1) configurations
+        nrf_gpio_cfg(MICROBIT_SCL_PIN, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_H0H1, NRF_GPIO_PIN_NOSENSE);
+        nrf_gpio_cfg(MICROBIT_SDA_PIN, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_H0H1, NRF_GPIO_PIN_NOSENSE);
     }
 
     // Helper function to initialize the IMU with settings from imu.h
