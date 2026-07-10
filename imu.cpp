@@ -196,13 +196,10 @@ namespace imu {
 
     // Helper function to set I2C pins to high drive mode for 400kHz operation
     // Define the missing Nordic macro manually
-    #ifndef NRF_GPIO_PIN_MAP
-    #define NRF_GPIO_PIN_MAP(port, pin) (((port) << 5) | ((pin) & 0x1F))
-    #endif
-
     #define TWI_FREQUENCY_390K 0x06200000
-    #define MICROBIT_SCL_PIN NRF_GPIO_PIN_MAP(0, 27) // P19 -> Evaluates to 27
-    #define MICROBIT_SDA_PIN NRF_GPIO_PIN_MAP(1, 0)  // P20 -> Evaluates to 32  
+    #define MICROBIT_SCL_PIN 27 // P19
+    #define MICROBIT_SDA_PIN 32 // P20 
+
     static void halSetFastI2C() {   
         // Apply the 390kHz register override
         NRF_TWI1->FREQUENCY = TWI_FREQUENCY_390K;
@@ -215,8 +212,6 @@ namespace imu {
     // Helper function to initialize the IMU with settings from imu.h
     //%
     void imuInit() {
-
-        halSetFastI2C(); // Set I2C pins to high drive mode for 400kHz operation
 
         initRingBuffer(&imuRingBuffer);
 
@@ -256,6 +251,8 @@ namespace imu {
 
         // Enable interrupt for DATA_RDY if imuConfig.enableInterrupts is true
         imuRegWrite(MPU6050_ADDR, MPU6050_INT_ENABLE, intEnable);
+
+        halSetFastI2C(); // Set I2C pins to high drive mode for 400kHz operation
     } 
 
     //%
