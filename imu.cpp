@@ -202,12 +202,13 @@ namespace imu {
         // 0x01980000 = 400kHz (Fast mode)
         // 0x06200000 = 250kHz
         // 0x01E00000 = 100kHz (Standard mode)
-        NRF_TWI1->FREQUENCY = 0x01980000;
+        NRF_TWI1->FREQUENCY = TWI_FREQUENCY_FREQUENCY_K400;
     }
 
     // Helper function to initialize the IMU with settings from imu.h
     //%
     void imuInit() {
+
         halSetFastI2C(); // Set I2C pins to high drive mode for 400kHz operation
 
         initRingBuffer(&imuRingBuffer);
